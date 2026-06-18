@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Контакты OSSNOVA</title>
+    <meta
+      name="description"
+      content="Контактная информация OSSNOVA: адрес офиса, почта, график работы и карта."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="OSSNOVA">
+        <span>OSSNOVA</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+        <a href="index.html">Главная</a>
+        <a href="ophthalmology.html">Офтальмология</a>
+        <a href="cardiology.html">Кардиология</a>
+        <a href="about.html">О компании</a>
+        <a href="contact.html" aria-current="page">Контакты</a>
+        <a href="#" lang="en">ENG</a>
+      </nav>
+    </header>
+
+    <main class="contacts-page" aria-labelledby="contacts-title">
+      <div class="contacts-content">
+        <h1 id="contacts-title">Контактная информация</h1>
+        <div class="contacts-grid">
+          <section class="contacts-info-card" aria-label="Контактные данные OSSNOVA">
+            <div class="contacts-brand">
+              <span>OSSNOVA</span>
+              <p>Медицинские технологии</p>
+            </div>
+            <div class="contacts-divider"></div>
+            <div class="contacts-info-list">
+              <div>
+                <span>Адрес</span>
+                <a href="https://maps.google.com/?q=ул.%20Академика%20Королёва,%2012,%20Москва">
+                  ул. Академика Королёва, 12, оф. 405
+                </a>
+              </div>
+              <div>
+                <span>Почта</span>
+                <a href="mailto:info@ossnova.ru">info@ossnova.ru</a>
+              </div>
+              <div>
+                <span>График работы</span>
+                <p>Пн-Пт, 9:00-18:00</p>
+              </div>
+            </div>
+            <div class="contacts-divider"></div>
+            <div class="contacts-question">
+              <span>Остались вопросы?</span>
+              <a href="mailto:info@ossnova.ru">Задать вопрос</a>
+            </div>
+          </section>
+
+          <section class="contacts-map" aria-label="Карта офиса OSSNOVA">
+            <img src="assets/contact-map.png" alt="" />
+            <span class="contacts-map-pin" aria-hidden="true">
+              <img src="assets/contact-map-pin.svg" alt="" />
+            </span>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="contact-only-footer">
+      <div class="footer-bottom">
+        <p>© 2026 MedVision Pro. Все права защищены.</p>
+        <div>
+          <a href="#">LinkedIn</a>
+          <a href="#">Twitter</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
