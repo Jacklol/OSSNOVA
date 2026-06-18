@@ -1,3 +1,26 @@
+const introMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+const introDemoButton = document.querySelector("[data-intro-demo='1']");
+let introCleanupTimer = 0;
+
+const stopHomeIntro = () => {
+  window.clearTimeout(introCleanupTimer);
+  introCleanupTimer = 0;
+  document.body.classList.remove("home-intro");
+};
+
+const startHomeIntro = () => {
+  if (introMotionPreference.matches) {
+    stopHomeIntro();
+    return;
+  }
+
+  stopHomeIntro();
+  void document.body.offsetWidth;
+  document.body.classList.add("home-intro");
+  window.dispatchEvent(new CustomEvent("home-intro:start"));
+  introCleanupTimer = window.setTimeout(stopHomeIntro, 2800);
+};
+
 const navToggle = document.querySelector(".nav-toggle");
 const siteNav = document.querySelector(".site-nav");
 
@@ -15,6 +38,18 @@ if (navToggle && siteNav) {
       siteNav.classList.remove("is-open");
       document.body.classList.remove("is-nav-open");
     });
+  });
+}
+
+if (introDemoButton) {
+  introDemoButton.addEventListener("click", () => {
+    startHomeIntro();
+
+    if (navToggle && siteNav) {
+      navToggle.setAttribute("aria-expanded", "false");
+      siteNav.classList.remove("is-open");
+      document.body.classList.remove("is-nav-open");
+    }
   });
 }
 
@@ -63,6 +98,7 @@ if (heroWaterCanvas) {
   let lastX = 0;
   let lastY = 0;
   let ready = false;
+  let introRipplesPlayed = false;
 
   const vertexShaderSource = `
     attribute vec2 a_position;
@@ -336,6 +372,35 @@ if (heroWaterCanvas) {
       startWater();
     };
 
+    const playIntroRipples = () => {
+      if (!document.body.classList.contains("home-intro") || introRipplesPlayed || reducedMotion.matches || !ready) {
+        return;
+      }
+
+      introRipplesPlayed = true;
+      [
+        { x: 0.1, y: 0.78, strength: 0.95, delay: 220 },
+        { x: 0.28, y: 0.68, strength: 1, delay: 360 },
+        { x: 0.5, y: 0.58, strength: 0.98, delay: 500 },
+        { x: 0.72, y: 0.48, strength: 0.9, delay: 650 },
+        { x: 0.9, y: 0.38, strength: 0.82, delay: 820 },
+        { x: 0.38, y: 0.34, strength: 0.72, delay: 980 },
+      ].forEach((ripple) => {
+        window.setTimeout(() => {
+          if (!ready) {
+            return;
+          }
+
+          const rect = heroWaterCanvas.getBoundingClientRect();
+          addRipple(
+            rect.left + rect.width * ripple.x,
+            rect.top + rect.height * ripple.y,
+            ripple.strength
+          );
+        }, ripple.delay);
+      });
+    };
+
     const bootWater = () => {
       if (reducedMotion.matches) {
         return;
@@ -346,7 +411,13 @@ if (heroWaterCanvas) {
       ready = true;
       hero.classList.add("is-water-ready");
       drawWater();
+      playIntroRipples();
     };
+
+    window.addEventListener("home-intro:start", () => {
+      introRipplesPlayed = false;
+      playIntroRipples();
+    });
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
