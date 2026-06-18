@@ -13,9 +13,13 @@
   <body>
     <header class="site-header">
       <a class="brand" href="index.html" aria-label="OSSNOVA">
-        <span>OSSNOVA</span>
+        <span class="brand-logo" aria-hidden="true">
+          <img class="brand-wordmark" src="assets/logo-ossnova-figma.svg" alt="" />
+          <img class="brand-line" src="assets/logo-line-figma.svg" alt="" />
+          <span class="brand-tagline">Medical technologies for quality of life</span>
+        </span>
       </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню">
         <span></span>
         <span></span>
         <span></span>
@@ -36,8 +40,11 @@
         <div class="contacts-grid">
           <section class="contacts-info-card" aria-label="Контактные данные OSSNOVA">
             <div class="contacts-brand">
-              <span>OSSNOVA</span>
-              <p>Медицинские технологии</p>
+              <div class="contacts-logo" aria-hidden="true">
+                <img class="brand-wordmark" src="assets/logo-ossnova-figma.svg" alt="" />
+                <img class="brand-line" src="assets/logo-line-figma.svg" alt="" />
+                <small>Medical technologies for quality of life</small>
+              </div>
             </div>
             <div class="contacts-divider"></div>
             <div class="contacts-info-list">
@@ -76,6 +83,9 @@
     <footer class="contact-only-footer">
       <div class="footer-bottom">
         <p>© 2026 MedVision Pro. Все права защищены.</p>
+        <p class="footer-credit footer-credit-bottom">
+          Разработано by <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
+        </p>
         <div>
           <a href="#">LinkedIn</a>
           <a href="#">Twitter</a>

@@ -13,9 +13,13 @@
   <body>
     <header class="site-header">
       <a class="brand" href="index.html" aria-label="OSSNOVA">
-        <span>OSSNOVA</span>
+        <span class="brand-logo" aria-hidden="true">
+          <img class="brand-wordmark" src="assets/logo-ossnova-figma.svg" alt="" />
+          <img class="brand-line" src="assets/logo-line-figma.svg" alt="" />
+          <span class="brand-tagline">Medical technologies for quality of life</span>
+        </span>
       </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню">
         <span></span>
         <span></span>
         <span></span>
@@ -26,7 +30,11 @@
         <a href="cardiology.html">Кардиология</a>
         <a href="about.html">О компании</a>
         <a href="contact.html">Контакты</a>
-        <button class="intro-demo-button" type="button" data-intro-demo="1">1-я анимация</button>
+        <span class="intro-demo-group" aria-label="Варианты анимации">
+          <button class="intro-demo-button" type="button" data-intro-demo="1" aria-label="1-я анимация">1-я</button>
+          <button class="intro-demo-button" type="button" data-intro-demo="2" aria-label="2-я анимация">2-я</button>
+          <button class="intro-demo-button" type="button" data-intro-demo="3" aria-label="3-я анимация">3-я</button>
+        </span>
         <a href="#" lang="en">ENG</a>
       </nav>
     </header>
@@ -36,6 +44,12 @@
         <img class="hero-bg" src="assets/hero.png" alt="" />
         <canvas class="hero-water" data-hero-water aria-hidden="true"></canvas>
         <div class="hero-wave-reveal" aria-hidden="true"></div>
+        <div class="hero-ripple-reveal" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="hero-mosaic-reveal" data-hero-mosaic aria-hidden="true"></div>
         <div class="section-shell hero-content">
           <h1 id="hero-title">Технологии для&nbsp;качества жизни</h1>
           <p>
@@ -48,13 +62,24 @@
 
       <section class="partners" aria-label="Партнеры">
         <div class="partner-track" aria-hidden="true">
-          <div class="partner-chip"><span></span>Партнеры</div>
-          <div class="partner-chip"><span></span>Партнеры</div>
-          <div class="partner-chip"><span></span>Партнеры</div>
-          <div class="partner-chip"><span></span>Партнеры</div>
-          <div class="partner-chip"><span></span>Партнеры</div>
-          <div class="partner-chip"><span></span>Партнеры</div>
-          <div class="partner-chip"><span></span>Партнеры</div>
+          <div class="partner-run">
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+          </div>
+          <div class="partner-run">
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+            <div class="partner-chip"><span></span>Партнеры</div>
+          </div>
         </div>
       </section>
 
@@ -91,6 +116,36 @@
                   <a class="text-link" href="cardiology.html">Подробнее</a>
                 </div>
               </article>
+
+              <article class="solution-card" aria-hidden="true">
+                <div class="solution-media">
+                  <img src="assets/solution-iol.png" alt="" />
+                </div>
+                <div class="solution-copy">
+                  <h2>Интраокулярные линзы (ИОЛ)</h2>
+                  <p>
+                    Премиальные линзы для коррекции катаракты и астигматизма. Мы предлагаем
+                    полный спектр решений: монофокальные, мультифокальные и торические ИОЛ от
+                    мировых лидеров индустрии.
+                  </p>
+                  <a class="text-link" href="ophthalmology.html" tabindex="-1">Подробнее</a>
+                </div>
+              </article>
+
+              <article class="solution-card" aria-hidden="true">
+                <div class="solution-media">
+                  <img src="assets/solution-cardiology.png" alt="" />
+                </div>
+                <div class="solution-copy">
+                  <h2>Кардиологические решения</h2>
+                  <p>
+                    Инновационные системы для электрофизиологии и интервенционной кардиологии.
+                    РЧА-катетеры нового поколения и системы навигации для лечения сложных
+                    аритмий.
+                  </p>
+                  <a class="text-link" href="cardiology.html" tabindex="-1">Подробнее</a>
+                </div>
+              </article>
             </div>
           </div>
           <div class="carousel-controls" aria-label="Переключение решений">
@@ -114,7 +169,50 @@
             Миллионы людей ежегодно доверяют свое зрение нашим технологиям. Мы помогаем видеть
             мир во всех его красках.
           </p>
-          <a class="button button-primary" href="ophthalmology.html">Офтальмология</a>
+          <a class="button button-primary" href="ophthalmology.html">Узнать больше</a>
+        </div>
+      </section>
+
+      <section class="home-about" id="about-preview" aria-labelledby="home-about-title">
+        <div class="section-shell home-about-shell">
+          <h2 id="home-about-title">О компании</h2>
+          <div class="home-about-panel">
+            <div class="home-about-media">
+              <img src="assets/about.png" alt="" />
+            </div>
+            <div class="home-about-content">
+              <div class="home-about-copy">
+                <p>
+                  OSSNOVA объединяет международную экспертизу и передовые медицинские технологии
+                  для офтальмологии и кардиологии. Мы развиваем решения, которые помогают врачам
+                  работать точнее, а пациентам — быстрее возвращаться к привычной жизни.
+                </p>
+                <a class="text-link text-link-light" href="about.html">Подробнее</a>
+              </div>
+              <dl class="home-about-stats">
+                <div>
+                  <dt>9,2 млн</dt>
+                  <dd>население страны</dd>
+                </div>
+                <div>
+                  <dt>Минск</dt>
+                  <dd>центральный офис</dd>
+                </div>
+                <div>
+                  <dt>30+</dt>
+                  <dd>стран партнерской сети</dd>
+                </div>
+                <div>
+                  <dt>207,6 тыс.</dt>
+                  <dd>км² территория Беларуси</dd>
+                </div>
+                <div>
+                  <dt>Центр</dt>
+                  <dd>Европы и логистики</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -128,19 +226,19 @@
             <img src="assets/material-iol.png" alt="" />
             <h3>Результаты имплантации ИОЛ</h3>
             <p>Многоцентровое исследование долгосрочной стабильности мультифокальных линз...</p>
-            <a class="text-link" href="ophthalmology.html">Подробнее</a>
+            <a class="text-link" href="ophthalmology.html">Читать статью</a>
           </article>
           <article class="material-card">
             <img src="assets/material-rfa.png" alt="" />
             <h3>Новые горизонты в РЧА</h3>
             <p>Обзор последних технологий в области криоабляции и радиочастотной терапии...</p>
-            <a class="text-link" href="cardiology.html">Подробнее</a>
+            <a class="text-link" href="cardiology.html">Читать статью</a>
           </article>
           <article class="material-card">
             <img src="assets/material-pacemaker.png" alt="" />
             <h3>Кардиостимуляторы будущего</h3>
             <p>Миниатюрные безэлектродные системы: клиническая эффективность и безопасность...</p>
-            <a class="text-link" href="cardiology.html">Подробнее</a>
+            <a class="text-link" href="cardiology.html">Читать статью</a>
           </article>
         </div>
       </section>
@@ -190,17 +288,26 @@
       </section>
 
       <section class="home-contact-cta" aria-labelledby="home-contact-title">
+        <img class="home-contact-bg" src="assets/contact-bg.png" alt="" />
         <div class="section-shell home-contact-cta-inner">
-          <div class="home-contact-copy">
-            <div class="section-title">
-              <h2 id="home-contact-title">Свяжитесь с нами</h2>
-              <span></span>
-            </div>
-            <p>
-              Обсудим поставки, партнерство и подбор медицинских технологий для вашей клиники.
-            </p>
-          </div>
-          <a class="button button-primary" href="contact.html">Перейти к контактам</a>
+          <div class="home-contact-spacer" aria-hidden="true"></div>
+          <form class="home-contact-form contact-form" action="#" method="post">
+            <h2 id="home-contact-title">Свяжитесь с нами</h2>
+            <label>
+              <span>Имя</span>
+              <input type="text" name="name" autocomplete="name" required />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+            <label>
+              <span>Сообщение</span>
+              <textarea name="message" required></textarea>
+            </label>
+            <button class="button button-primary" type="submit">Отправить</button>
+            <p class="form-status" aria-live="polite"></p>
+          </form>
         </div>
       </section>
     </main>
@@ -208,8 +315,15 @@
     <footer class="site-footer">
       <div class="footer-main">
         <div class="footer-brand">
-          <span>OSSNOVA</span>
+          <span class="footer-logo" aria-label="OSSNOVA">
+            <img class="brand-wordmark" src="assets/logo-ossnova-figma.svg" alt="" />
+            <img class="brand-line" src="assets/logo-line-figma.svg" alt="" />
+            <small>Medical technologies for quality of life</small>
+          </span>
           <p>Инновационные медицинские решения для повышения качества жизни пациентов по всему миру</p>
+          <p class="footer-credit">
+            Разработано by <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
+          </p>
         </div>
         <div class="footer-links">
           <div>
