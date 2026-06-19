@@ -166,6 +166,272 @@ if (carousel) {
   });
 }
 
+const belarusMapRoot = document.querySelector("[data-belarus-map]");
+
+if (belarusMapRoot) {
+  const d3Api = window.d3;
+  const geoData = window.OSSNOVA_BELARUS_ADM1;
+  const loader = belarusMapRoot.querySelector("[data-belarus-loader]");
+  const regionPanel = belarusMapRoot.querySelector(".belarus-region-panel");
+  const regionName = belarusMapRoot.querySelector("[data-belarus-region-name]");
+  const regionText = belarusMapRoot.querySelector("[data-belarus-region-text]");
+  const regionMetrics = belarusMapRoot.querySelector("[data-belarus-region-metrics]");
+
+  const regionDetails = {
+    Brest: {
+      title: "Брестская область",
+      text: "Западное направление: логистика, офтальмологические решения и поддержка партнерских клиник.",
+      metrics: [
+        ["34", "клиники"],
+        ["820+", "медработников"],
+        ["11", "партнерских точек"],
+        ["6", "обучающих выездов"],
+      ],
+    },
+    Vitebsk: {
+      title: "Витебская область",
+      text: "Северный регион сети: поставки медицинских технологий и сопровождение специалистов на местах.",
+      metrics: [
+        ["29", "клиник"],
+        ["690+", "медработников"],
+        ["9", "партнерских точек"],
+        ["5", "обучающих выездов"],
+      ],
+    },
+    Grodno: {
+      title: "Гродненская область",
+      text: "Региональная работа с клиниками, где важны стабильные поставки и обучение врачебных команд.",
+      metrics: [
+        ["31", "клиника"],
+        ["760+", "медработников"],
+        ["10", "партнерских точек"],
+        ["5", "обучающих выездов"],
+      ],
+    },
+    Gomel: {
+      title: "Гомельская область",
+      text: "Юго-восточное покрытие: технологические решения для офтальмологии и кардиологических направлений.",
+      metrics: [
+        ["38", "клиник"],
+        ["910+", "медработников"],
+        ["12", "партнерских точек"],
+        ["7", "обучающих выездов"],
+      ],
+    },
+    Mogilev: {
+      title: "Могилевская область",
+      text: "Восточная часть партнерской сети: консультации, оборудование и сервисное взаимодействие.",
+      metrics: [
+        ["27", "клиник"],
+        ["640+", "медработников"],
+        ["8", "партнерских точек"],
+        ["4", "обучающих выезда"],
+      ],
+    },
+    Minsk: {
+      title: "Минская область",
+      text: "Центральный регион: связующее звено между столичным офисом и медицинскими учреждениями страны.",
+      metrics: [
+        ["42", "клиники"],
+        ["1 040+", "медработников"],
+        ["14", "партнерских точек"],
+        ["8", "обучающих выездов"],
+      ],
+    },
+    "Minsk City": {
+      title: "Минск",
+      text: "Центральный офис OSSNOVA: координация поставок, партнерских проектов и поддержки специалистов.",
+      metrics: [
+        ["58", "клиник"],
+        ["1 480+", "медработников"],
+        ["21", "партнерская точка"],
+        ["12", "обучающих выездов"],
+      ],
+    },
+  };
+
+  const defaultRegion = {
+    title: "Беларусь",
+    text: "Наведите на область на карте, чтобы увидеть информацию о региональном покрытии.",
+    metrics: [
+      ["259", "клиник"],
+      ["6 340+", "медработников"],
+      ["85", "партнерских точек"],
+      ["47", "обучающих выездов"],
+    ],
+  };
+
+  const setPanel = (details = defaultRegion) => {
+    if (regionName) {
+      regionName.textContent = details.title;
+    }
+
+    if (regionText) {
+      regionText.textContent = details.text;
+    }
+
+    if (regionMetrics) {
+      const metrics = details.metrics || defaultRegion.metrics;
+
+      regionMetrics.replaceChildren();
+      metrics.forEach(([value, label]) => {
+        const item = document.createElement("div");
+        const number = document.createElement("strong");
+        const caption = document.createElement("span");
+
+        number.textContent = value;
+        caption.textContent = label;
+        item.append(number, caption);
+        regionMetrics.append(item);
+      });
+    }
+
+    if (regionPanel) {
+      regionPanel.classList.remove("is-changing");
+      void regionPanel.offsetWidth;
+      regionPanel.classList.add("is-changing");
+    }
+  };
+
+  const getFeatureName = (feature) => feature && feature.properties ? feature.properties.shapeName : "";
+
+  const reverseGeometry = (geometry) => {
+    if (!geometry) {
+      return geometry;
+    }
+
+    if (geometry.type === "Polygon") {
+      return {
+        ...geometry,
+        coordinates: geometry.coordinates.map((ring) => ring.slice().reverse()),
+      };
+    }
+
+    if (geometry.type === "MultiPolygon") {
+      return {
+        ...geometry,
+        coordinates: geometry.coordinates.map((polygon) => polygon.map((ring) => ring.slice().reverse())),
+      };
+    }
+
+    return geometry;
+  };
+
+  const normalizeFeature = (feature) => ({
+    ...feature,
+    geometry: reverseGeometry(feature.geometry),
+  });
+
+  const initBelarusMap = () => {
+    if (!d3Api || !geoData || !Array.isArray(geoData.features)) {
+      throw new Error("Map data is not available");
+    }
+
+    const mapData = {
+      ...geoData,
+      features: geoData.features.map(normalizeFeature),
+    };
+    const projection = d3Api.geoMercator().fitExtent([[88, 72], [642, 486]], mapData);
+    const path = d3Api.geoPath(projection);
+    const svg = d3Api.select(belarusMapRoot).select(".belarus-map");
+    const haloLayer = svg.select("[data-belarus-halo]");
+    const regionLayer = svg.select("[data-belarus-regions]");
+    const mapCenter = path.centroid(mapData);
+
+    haloLayer
+      .append("path")
+      .datum(mapData)
+      .attr("class", "belarus-map__outline")
+      .attr("d", path);
+
+    const regions = regionLayer
+      .selectAll(".belarus-region")
+      .data(mapData.features, getFeatureName)
+      .join((enter) => {
+        const group = enter
+          .append("g")
+          .attr("class", "belarus-region")
+          .attr("role", "button")
+          .attr("tabindex", "0")
+          .attr("aria-label", (feature) => {
+            const details = regionDetails[getFeatureName(feature)] || defaultRegion;
+            return details.title;
+          });
+
+        group.append("path").attr("class", "belarus-region__shape");
+        group.append("path").attr("class", "belarus-region__hit");
+        group.append("circle").attr("class", "belarus-region__hotspot");
+
+        return group;
+      });
+
+    regions.each(function renderRegion(feature) {
+      const group = d3Api.select(this);
+      const centroid = path.centroid(feature);
+      const vectorX = centroid[0] - mapCenter[0];
+      const vectorY = centroid[1] - mapCenter[1];
+      const vectorLength = Math.max(Math.hypot(vectorX, vectorY), 1);
+      const lift = getFeatureName(feature) === "Minsk City" ? 14 : 9;
+
+      group
+        .style("--region-x", `${(vectorX / vectorLength) * lift}px`)
+        .style("--region-y", `${(vectorY / vectorLength) * lift}px`);
+
+      group.select(".belarus-region__shape").attr("d", path(feature));
+      group.select(".belarus-region__hit").attr("d", path(feature));
+      group
+        .select(".belarus-region__hotspot")
+        .attr("cx", centroid[0])
+        .attr("cy", centroid[1])
+        .attr("r", getFeatureName(feature) === "Minsk City" ? 26 : 0);
+    });
+
+    const setActiveRegion = (feature) => {
+      const name = getFeatureName(feature);
+      const details = regionDetails[name] || defaultRegion;
+
+      regions.classed("is-active", (regionFeature) => getFeatureName(regionFeature) === name);
+      setPanel(details);
+    };
+
+    regions
+      .on("pointerenter", (event, feature) => setActiveRegion(feature))
+      .on("focus", (event, feature) => setActiveRegion(feature))
+      .on("click", (event, feature) => setActiveRegion(feature))
+      .on("keydown", (event, feature) => {
+        if (event.key !== "Enter" && event.key !== " ") {
+          return;
+        }
+
+        event.preventDefault();
+        setActiveRegion(feature);
+      });
+
+    const capital = mapData.features.find((feature) => getFeatureName(feature) === "Minsk City") || mapData.features[0];
+    setActiveRegion(capital);
+
+    if (loader) {
+      loader.hidden = true;
+    }
+
+    belarusMapRoot.classList.add("is-loaded");
+    svg.attr("data-region-count", mapData.features.length);
+  };
+
+  try {
+    initBelarusMap();
+  } catch (error) {
+    setPanel({
+      title: "Карта временно недоступна",
+      text: "Не удалось загрузить интерактивную геометрию. Остальной контент страницы работает без ограничений.",
+    });
+
+    if (loader) {
+      loader.textContent = "Карта временно недоступна";
+    }
+  }
+}
+
 const heroWaterCanvas = document.querySelector("[data-hero-water]");
 
 if (heroWaterCanvas) {

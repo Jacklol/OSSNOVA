@@ -161,15 +161,62 @@
         </div>
       </section>
 
-      <section class="vision-band" aria-labelledby="vision-title">
-        <img src="assets/vision.png" alt="" />
-        <div class="vision-panel">
-          <h2 id="vision-title">Лучшее зрение — это&nbsp;свобода</h2>
-          <p>
-            Миллионы людей ежегодно доверяют свое зрение нашим технологиям. Мы помогаем видеть
-            мир во всех его красках.
-          </p>
-          <a class="button button-primary" href="ophthalmology.html">Узнать больше</a>
+      <section class="belarus-network" aria-labelledby="belarus-title">
+        <div class="section-shell belarus-network__shell">
+          <div class="belarus-network__copy">
+            <p class="section-kicker">География OSSNOVA</p>
+            <h2 id="belarus-title">Беларусь в сети OSSNOVA</h2>
+            <p>
+              Мы развиваем партнерскую сеть по всей стране: от центрального офиса в Минске до
+              региональных клиник, где важны точность поставок, обучение специалистов и быстрая
+              поддержка врачей.
+            </p>
+            <div class="belarus-network__stats" aria-label="Показатели покрытия">
+              <div>
+                <strong>6</strong>
+                <span>областей</span>
+              </div>
+              <div>
+                <strong>1</strong>
+                <span>столица</span>
+              </div>
+              <div>
+                <strong>24/7</strong>
+                <span>поддержка</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="belarus-map-card" data-belarus-map>
+            <div class="belarus-map-card__globe" aria-hidden="true"></div>
+            <div class="belarus-map-card__stage">
+              <svg
+                class="belarus-map"
+                viewBox="0 0 760 560"
+                role="img"
+                aria-labelledby="belarus-map-title"
+                aria-describedby="belarus-map-desc"
+              >
+                <title id="belarus-map-title">Карта Беларуси из точек</title>
+                <desc id="belarus-map-desc">
+                  Интерактивная карта регионов Беларуси. Наведите курсор или перейдите клавиатурой
+                  по областям, чтобы увидеть информацию.
+                </desc>
+                <g class="belarus-map__halo" data-belarus-halo></g>
+                <g class="belarus-map__regions" data-belarus-regions></g>
+              </svg>
+              <div class="belarus-map-loader" data-belarus-loader>Загрузка карты</div>
+            </div>
+
+            <aside class="belarus-region-panel" aria-live="polite">
+              <span>Регион</span>
+              <h3 data-belarus-region-name>Беларусь</h3>
+              <p data-belarus-region-text>
+                Наведите на область на карте, чтобы увидеть информацию о региональном покрытии.
+              </p>
+              <div class="belarus-region-metrics" data-belarus-region-metrics aria-label="Показатели региона"></div>
+            </aside>
+          </div>
         </div>
       </section>
 
@@ -352,6 +399,8 @@
       </div>
     </footer>
 
+    <script src="assets/d3.v7.min.js"></script>
+    <script src="assets/belarus-adm1.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
