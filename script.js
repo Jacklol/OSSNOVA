@@ -1130,12 +1130,136 @@ if (heroWaterCanvas) {
   }
 }
 
-const contactForm = document.querySelector(".contact-form");
+const contactModal = document.querySelector(".contact-modal");
+const contactModalOpenButtons = document.querySelectorAll("[data-contact-modal-open]");
+const contactModalCloseButtons = document.querySelectorAll("[data-contact-modal-close]");
+let contactModalReturnFocus = null;
 
-if (contactForm) {
-  contactForm.addEventListener("submit", (event) => {
+const getContactModalFocusableElements = () => {
+  if (!contactModal) {
+    return [];
+  }
+
+  return Array.from(
+    contactModal.querySelectorAll(
+      "button:not([disabled]):not([tabindex='-1']), input:not([disabled]), textarea:not([disabled]), a[href]"
+    )
+  ).filter((element) => element.getClientRects().length > 0);
+};
+
+const focusContactModalFirstField = () => {
+  contactModal?.querySelector("input:not([disabled]), textarea:not([disabled])")?.focus();
+};
+
+const openContactModal = () => {
+  if (!contactModal) {
+    return;
+  }
+
+  contactModalReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  contactModal.inert = false;
+  contactModal.classList.add("is-open");
+  contactModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("is-modal-open");
+
+  focusContactModalFirstField();
+  window.requestAnimationFrame(focusContactModalFirstField);
+  window.setTimeout(focusContactModalFirstField, 120);
+};
+
+const closeContactModal = () => {
+  if (!contactModal || !contactModal.classList.contains("is-open")) {
+    return;
+  }
+
+  contactModal.classList.remove("is-open");
+  contactModal.setAttribute("aria-hidden", "true");
+  contactModal.inert = true;
+  document.body.classList.remove("is-modal-open");
+  contactModalReturnFocus?.focus();
+  contactModalReturnFocus = null;
+};
+
+contactModalOpenButtons.forEach((button) => {
+  button.addEventListener("click", openContactModal);
+});
+
+contactModalCloseButtons.forEach((button) => {
+  button.addEventListener("click", closeContactModal);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!contactModal || !contactModal.classList.contains("is-open")) {
+    return;
+  }
+
+  if (event.key === "Escape") {
+    closeContactModal();
+    return;
+  }
+
+  if (event.key !== "Tab") {
+    return;
+  }
+
+  const focusableElements = getContactModalFocusableElements();
+
+  if (focusableElements.length === 0) {
+    return;
+  }
+
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+
+  if (event.shiftKey && document.activeElement === firstElement) {
     event.preventDefault();
+    lastElement.focus();
+  } else if (!event.shiftKey && document.activeElement === lastElement) {
+    event.preventDefault();
+    firstElement.focus();
+  }
+});
+
+const contactFormSuccessMessage = "Запрос подготовлен. Подключите обработчик формы для отправки данных.";
+
+// Реальную отправку формы нужно подключить здесь: функция используется всеми контактными формами.
+const submitContactRequest = async (form, formData) => ({
+  message: contactFormSuccessMessage,
+  form,
+  formData,
+});
+
+document.querySelectorAll("[data-contact-form]").forEach((contactForm) => {
+  contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
     const status = contactForm.querySelector(".form-status");
-    status.textContent = "Запрос подготовлен. Подключите обработчик формы для отправки данных.";
+    const submitButton = contactForm.querySelector("button[type='submit']");
+
+    if (status) {
+      status.textContent = "";
+    }
+
+    if (submitButton) {
+      submitButton.disabled = true;
+    }
+
+    try {
+      const result = await submitContactRequest(contactForm, new FormData(contactForm));
+
+      if (status) {
+        status.textContent = result?.message || contactFormSuccessMessage;
+      }
+
+      contactForm.reset();
+    } catch (error) {
+      if (status) {
+        status.textContent = "Не удалось подготовить запрос. Попробуйте еще раз.";
+      }
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+      }
+    }
   });
-}
+});

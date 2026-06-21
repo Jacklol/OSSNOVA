@@ -8,7 +8,9 @@
       name="description"
       content="Контактная информация OSSNOVA: адрес офиса, почта, график работы и карта."
     />
-    <link rel="stylesheet" href="styles.css?v=menu-footer-motion-1" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=ossnova-favicon-1" />
+    <meta name="theme-color" content="#b90e2f" />
+    <link rel="stylesheet" href="styles.css?v=contact-modal-4" />
   </head>
   <body>
     <header class="site-header">
@@ -50,8 +52,8 @@
             <div class="contacts-info-list">
               <div>
                 <span>Адрес</span>
-                <a href="https://maps.google.com/?q=ул.%20Академика%20Королёва,%2012,%20Москва">
-                  ул. Академика Королёва, 12, оф. 405
+                <a href="https://www.google.com/maps/search/?api=1&query=%D1%83%D0%BB.%20%D0%9B%D0%B5%D0%B2%D0%BA%D0%BE%D0%B2%D0%B0%2024%2C%20%D0%9C%D0%B8%D0%BD%D1%81%D0%BA%2C%20%D0%91%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C">
+                  ул. Левкова, 24, Минск, Беларусь
                 </a>
               </div>
               <div>
@@ -66,12 +68,14 @@
             <div class="contacts-divider"></div>
             <div class="contacts-question">
               <span>Остались вопросы?</span>
-              <a href="mailto:info@ossnova.ru">Задать вопрос</a>
+              <button class="contacts-question-link" type="button" data-contact-modal-open aria-controls="contact-question-modal">
+                Задать вопрос
+              </button>
             </div>
           </section>
 
           <section class="contacts-map" aria-label="Карта офиса OSSNOVA">
-            <img src="assets/contact-map.png" alt="" />
+            <img src="assets/contact-map-levkova.svg?v=levkova-map-1" alt="" />
             <span class="contacts-map-pin" aria-hidden="true">
               <img src="assets/contact-map-pin.svg" alt="" />
             </span>
@@ -79,6 +83,33 @@
         </div>
       </div>
     </main>
+
+    <div class="contact-modal" id="contact-question-modal" aria-hidden="true" inert>
+      <button class="contact-modal__backdrop" type="button" data-contact-modal-close aria-label="Закрыть форму" tabindex="-1"></button>
+      <section class="contact-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+        <button class="contact-modal__close" type="button" data-contact-modal-close aria-label="Закрыть форму">
+          <span></span>
+          <span></span>
+        </button>
+        <form class="contact-form contact-modal__form" action="#" method="post" data-contact-form>
+          <h2 id="contact-modal-title">Свяжитесь с нами</h2>
+          <label>
+            <span>Имя</span>
+            <input type="text" name="name" autocomplete="name" required />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+          <label>
+            <span>Сообщение</span>
+            <textarea name="message" required></textarea>
+          </label>
+          <button class="button button-primary" type="submit">Отправить</button>
+          <p class="form-status" aria-live="polite"></p>
+        </form>
+      </section>
+    </div>
 
     <footer class="contact-only-footer">
       <div class="footer-bottom">
@@ -93,6 +124,6 @@
       </div>
     </footer>
 
-    <script src="script.js?v=article-pages-1"></script>
+    <script src="script.js?v=contact-modal-4"></script>
   </body>
 </html>
