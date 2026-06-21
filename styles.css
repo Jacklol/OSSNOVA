@@ -1301,19 +1301,54 @@ summary {
 }
 
 .text-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 4px;
   margin-top: 24px;
+  padding-bottom: 5px;
   color: var(--button);
   font-weight: 500;
   text-transform: uppercase;
+  transform-origin: left center;
+  transition:
+    color 180ms ease,
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.text-link::before {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
 }
 
 .text-link::after {
   content: "→";
   font-size: 16px;
   line-height: 1;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.text-link:hover,
+.text-link:focus-visible {
+  transform: translateX(6px) scale(1.045);
+}
+
+.text-link:hover::before,
+.text-link:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.text-link:hover::after,
+.text-link:focus-visible::after {
+  transform: translateX(4px);
 }
 
 .text-link-light {
@@ -1394,7 +1429,7 @@ summary {
 .belarus-network::before {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   background:
     linear-gradient(118deg, rgba(255, 255, 255, 0) 16%, rgba(255, 255, 255, 0.82) 42%, rgba(255, 255, 255, 0) 68%),
     radial-gradient(ellipse at 76% 44%, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0) 54%);
@@ -1404,17 +1439,37 @@ summary {
 
 .belarus-network::after {
   position: absolute;
-  inset: auto -14% -34% auto;
+  top: 48%;
+  left: 68%;
   z-index: -1;
-  width: min(920px, 72vw);
+  width: min(820px, 68vw);
   aspect-ratio: 1;
-  border: 1px solid rgba(185, 14, 47, 0.16);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 48% 45%, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 54%),
-    repeating-radial-gradient(circle at 50% 50%, rgba(185, 14, 47, 0.08) 0 1px, transparent 1px 42px);
+  background: url("assets/globe-belarus-bg.svg") center / contain no-repeat;
   content: "";
-  opacity: 0.9;
+  opacity: 0.58;
+  transform: translate(-50%, -50%) rotate(-9deg);
+}
+
+.belarus-network.is-globe-ready::after {
+  opacity: 0;
+}
+
+.belarus-network__globe {
+  position: absolute;
+  top: 48%;
+  left: 68%;
+  z-index: -1;
+  display: block;
+  width: min(820px, 68vw);
+  height: min(820px, 68vw);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 420ms ease;
+}
+
+.belarus-network.is-globe-ready .belarus-network__globe {
+  opacity: 0.68;
 }
 
 .belarus-network__shell {
@@ -1436,6 +1491,24 @@ summary {
   hyphens: manual;
   overflow-wrap: normal;
   word-break: normal;
+}
+
+.belarus-network__title {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.belarus-title-logo {
+  display: grid;
+  width: min(360px, 100%);
+  gap: 7px;
+}
+
+.belarus-title-logo .brand-wordmark {
+  width: 100%;
+  height: clamp(30px, 2.65vw, 42px);
+  filter: brightness(0) saturate(100%) invert(15%) sepia(98%) saturate(3437%) hue-rotate(337deg) brightness(83%) contrast(101%);
 }
 
 .belarus-network__copy > p:not(.section-kicker) {
@@ -1484,74 +1557,31 @@ summary {
 
 .belarus-map-card {
   position: relative;
-  min-height: 690px;
-  overflow: hidden;
-  border: 1px solid rgba(185, 14, 47, 0.16);
-  background:
-    radial-gradient(circle at 72% 56%, rgba(200, 16, 46, 0.13), rgba(200, 16, 46, 0) 31%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(229, 233, 239, 0.82));
-  box-shadow: 0 34px 92px rgba(82, 91, 109, 0.22);
+  min-height: 660px;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
   isolation: isolate;
 }
 
 .belarus-map-card::before {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background:
-    radial-gradient(circle at 47% 38%, rgba(255, 255, 255, 0.84), transparent 36%),
-    radial-gradient(circle at 38% 70%, rgba(173, 181, 193, 0.22), transparent 34%),
-    radial-gradient(circle at 74% 61%, rgba(200, 16, 46, 0.12), transparent 30%);
-  content: "";
+  display: none;
 }
 
 .belarus-map-card::after {
-  position: absolute;
-  inset: 26px;
-  z-index: -1;
-  border: 1px solid rgba(185, 14, 47, 0.08);
-  content: "";
-  pointer-events: none;
+  display: none;
 }
 
 .belarus-map-card__globe {
-  position: absolute;
-  top: 48px;
-  left: 50%;
-  width: min(580px, 74%);
-  aspect-ratio: 1;
-  border: 1px solid rgba(185, 14, 47, 0.16);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 36% 26%, rgba(255, 255, 255, 0.76), transparent 18%),
-    radial-gradient(circle at 50% 50%, rgba(185, 14, 47, 0.08), rgba(185, 14, 47, 0) 58%),
-    repeating-radial-gradient(circle at 50% 50%, rgba(107, 116, 130, 0.16) 0 1px, transparent 1px 44px);
-  opacity: 0.78;
-  transform: translateX(-50%) rotate(-9deg);
-}
-
-.belarus-map-card__globe::before,
-.belarus-map-card__globe::after {
-  position: absolute;
-  inset: 9%;
-  border: 1px solid rgba(185, 14, 47, 0.11);
-  border-radius: 50%;
-  content: "";
-}
-
-.belarus-map-card__globe::before {
-  transform: scaleX(0.36);
-}
-
-.belarus-map-card__globe::after {
-  transform: scaleY(0.42);
+  display: none;
 }
 
 .belarus-map-card__stage {
   position: relative;
   z-index: 1;
-  height: 548px;
-  padding: 48px 40px 0;
+  height: 620px;
+  padding: 22px 18px 0;
 }
 
 .belarus-map {
@@ -1576,7 +1606,7 @@ summary {
 
 .belarus-map__outline {
   fill: rgba(255, 255, 255, 0.28);
-  stroke: rgba(185, 14, 47, 0.3);
+  stroke: rgba(185, 14, 47, 0.2);
   stroke-dasharray: 8 12;
   stroke-width: 1.6;
   vector-effect: non-scaling-stroke;
@@ -1624,18 +1654,19 @@ summary {
 
 .belarus-region-panel {
   position: absolute;
-  right: 30px;
-  bottom: 30px;
+  top: 28px;
+  left: 28px;
   z-index: 2;
-  width: min(480px, calc(100% - 60px));
-  padding: 22px;
+  width: min(286px, calc(100% - 56px));
+  padding: 14px;
   border: 1px solid rgba(185, 14, 47, 0.18);
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.28)),
-    rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(20px) saturate(1.15);
-  box-shadow: 0 24px 58px rgba(82, 91, 109, 0.2);
-  transform: translateY(8px);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.24)),
+    rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px) saturate(1.12);
+  box-shadow: 0 18px 42px rgba(82, 91, 109, 0.16);
+  pointer-events: none;
+  transform: translateY(6px);
 }
 
 .belarus-region-panel.is-changing {
@@ -1645,7 +1676,7 @@ summary {
 .belarus-region-panel span {
   display: block;
   color: var(--red);
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.16em;
   line-height: 1.2;
@@ -1653,33 +1684,30 @@ summary {
 }
 
 .belarus-region-panel h3 {
-  margin: 12px 0 0;
+  margin: 8px 0 0;
   font-family: "Unbounded", Arial, sans-serif;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 500;
   line-height: 1.12;
   color: #1c1c2e;
 }
 
 .belarus-region-panel p {
-  margin: 14px 0 0;
-  color: #525661;
-  font-size: 15px;
-  line-height: 1.55;
+  display: none;
 }
 
 .belarus-region-metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 18px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .belarus-region-metrics div {
   min-width: 0;
-  padding: 12px 14px;
+  padding: 9px 10px;
   border: 1px solid rgba(185, 14, 47, 0.12);
-  background: rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.34);
 }
 
 .belarus-region-metrics strong,
@@ -1690,15 +1718,15 @@ summary {
 .belarus-region-metrics strong {
   color: var(--red);
   font-family: "Unbounded", Arial, sans-serif;
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 500;
   line-height: 1;
 }
 
 .belarus-region-metrics span {
-  margin-top: 8px;
+  margin-top: 6px;
   color: #5f626b;
-  font-size: 11px;
+  font-size: 9px;
   line-height: 1.25;
 }
 
@@ -3066,7 +3094,6 @@ summary {
 }
 
 .contacts-page {
-  min-height: calc(100vh - 158px);
   background: #f8f9fa;
 }
 
@@ -3097,7 +3124,6 @@ summary {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  min-height: 638px;
   padding: 48px;
   border-radius: 8px;
   background: var(--red);
@@ -3206,14 +3232,15 @@ summary {
 
 .contacts-map {
   position: relative;
-  height: 727px;
   min-width: 0;
+  aspect-ratio: 16 / 13;
   overflow: hidden;
   border-radius: 8px;
   background: #ffffff;
 }
 
 .contacts-map > img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -3543,6 +3570,26 @@ summary {
     min-height: 0;
   }
 
+  .solution-track {
+    animation: none;
+    transform: translateX(0);
+    will-change: auto;
+  }
+
+  .carousel-controls {
+    display: flex;
+  }
+
+  .solution-card,
+  .tech-feature,
+  .cardiology-feature,
+  .about-hero,
+  .home-about-content,
+  .home-contact-cta-inner,
+  .contacts-grid {
+    align-items: stretch;
+  }
+
   .solution-media {
     height: 380px;
   }
@@ -3565,12 +3612,12 @@ summary {
   }
 
   .belarus-map-card {
-    min-height: 650px;
+    min-height: 620px;
   }
 
   .belarus-map-card__stage {
-    height: 500px;
-    padding-inline: 28px;
+    height: 580px;
+    padding-inline: 16px;
   }
 
   .home-about {
@@ -3716,6 +3763,13 @@ summary {
     height: 460px;
   }
 
+  .solution-media,
+  .tech-media,
+  .cardiology-feature-media,
+  .about-hero-media {
+    width: 100%;
+  }
+
   .cardiology-feature-copy {
     gap: 24px;
   }
@@ -3801,7 +3855,7 @@ summary {
   }
 
   .contacts-content {
-    padding: 72px 24px 96px;
+    padding: 56px 24px 72px;
   }
 
   .contacts-grid {
@@ -3810,11 +3864,10 @@ summary {
 
   .contacts-info-card {
     width: 100%;
-    min-height: 0;
   }
 
   .contacts-map {
-    height: 560px;
+    aspect-ratio: 16 / 9;
   }
 
   .footer-main,
@@ -4008,9 +4061,32 @@ summary {
     gap: 32px;
   }
 
+  .belarus-network::after {
+    top: 58%;
+    left: 63%;
+    width: 116vw;
+    opacity: 0.42;
+  }
+
+  .belarus-network__globe {
+    top: 58%;
+    left: 63%;
+    width: 116vw;
+    height: 116vw;
+  }
+
+  .belarus-network.is-globe-ready .belarus-network__globe {
+    opacity: 0.52;
+  }
+
   .section-kicker {
     margin-bottom: 14px;
     font-size: 10px;
+  }
+
+  .belarus-title-logo {
+    width: min(250px, 92%);
+    gap: 5px;
   }
 
   .belarus-network__copy > p:not(.section-kicker) {
@@ -4034,50 +4110,36 @@ summary {
   }
 
   .belarus-map-card {
-    min-height: 602px;
-  }
-
-  .belarus-map-card::after {
-    inset: 14px;
-  }
-
-  .belarus-map-card__globe {
-    top: 54px;
-    width: 86%;
+    min-height: 520px;
   }
 
   .belarus-map-card__stage {
-    height: 406px;
-    padding: 26px 10px 0;
+    height: 500px;
+    padding: 16px 4px 0;
   }
 
   .belarus-region-panel {
-    right: 16px;
-    bottom: 16px;
-    width: calc(100% - 32px);
-    padding: 18px;
+    top: 16px;
+    left: 16px;
+    width: min(238px, calc(100% - 32px));
+    padding: 12px;
   }
 
   .belarus-region-panel h3 {
-    font-size: 22px;
-  }
-
-  .belarus-region-panel p {
-    font-size: 13px;
-    line-height: 1.45;
+    font-size: 17px;
   }
 
   .belarus-region-metrics {
-    gap: 8px;
-    margin-top: 14px;
+    gap: 6px;
+    margin-top: 10px;
   }
 
   .belarus-region-metrics div {
-    padding: 10px;
+    padding: 8px;
   }
 
   .belarus-region-metrics strong {
-    font-size: 18px;
+    font-size: 15px;
   }
 
   .belarus-region-metrics span {
@@ -4479,8 +4541,8 @@ summary {
   }
 
   .contacts-content {
-    gap: 40px;
-    padding: 64px 16px;
+    gap: 28px;
+    padding: 40px 16px 48px;
   }
 
   .contacts-content h1 {
@@ -4489,12 +4551,12 @@ summary {
   }
 
   .contacts-info-card {
-    gap: 32px;
-    padding: 32px 24px;
+    gap: 24px;
+    padding: 24px 20px;
   }
 
   .contacts-info-list {
-    gap: 28px;
+    gap: 22px;
   }
 
   .contacts-info-list a,
@@ -4504,7 +4566,7 @@ summary {
   }
 
   .contacts-map {
-    height: 420px;
+    aspect-ratio: 4 / 3;
   }
 
   .footer-main {
@@ -4621,19 +4683,23 @@ summary {
   }
 
   .belarus-map-card {
-    min-height: 570px;
+    min-height: 488px;
   }
 
   .belarus-map-card__stage {
-    height: 360px;
+    height: 464px;
+  }
+
+  .belarus-title-logo {
+    width: min(218px, 92%);
   }
 
   .belarus-region-panel {
-    padding: 16px;
+    padding: 10px;
   }
 
   .belarus-region-metrics strong {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .home-about-media {
@@ -4690,10 +4756,6 @@ summary {
   }
 
   .contacts-info-card {
-    padding: 28px 20px;
-  }
-
-  .contacts-map {
-    height: 360px;
+    padding: 22px 18px;
   }
 }

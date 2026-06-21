@@ -144,20 +144,63 @@ const carousel = document.querySelector("[data-carousel]");
 
 if (carousel) {
   const track = carousel.querySelector(".solution-track");
-  const slides = Array.from(carousel.querySelectorAll(".solution-card"));
+  const slides = Array.from(carousel.querySelectorAll(".solution-card:not([aria-hidden='true'])"));
+  const allSlides = Array.from(carousel.querySelectorAll(".solution-card"));
   const dots = Array.from(carousel.querySelectorAll("[data-carousel-dot]"));
   const prev = carousel.querySelector("[data-carousel-prev]");
   const next = carousel.querySelector("[data-carousel-next]");
   let current = 0;
+  let isLoopResetting = false;
 
-  const updateCarousel = (index) => {
-    current = (index + slides.length) % slides.length;
-    track.style.transform = `translateX(-${current * 100}%)`;
+  const setTrackPosition = (index, animated = true) => {
+    if (!track) {
+      return;
+    }
+
+    track.style.transition = animated ? "" : "none";
+    track.style.transform = `translateX(-${index * 100}%)`;
+
+    if (!animated) {
+      void track.offsetWidth;
+      track.style.transition = "";
+    }
+  };
+
+  const updateDots = () => {
     dots.forEach((dot, dotIndex) => {
       dot.classList.toggle("is-active", dotIndex === current);
       dot.setAttribute("aria-current", dotIndex === current ? "true" : "false");
     });
   };
+
+  const updateCarousel = (index) => {
+    if (!track || slides.length === 0) {
+      return;
+    }
+
+    if (index >= slides.length && allSlides.length > slides.length) {
+      current = 0;
+      updateDots();
+      setTrackPosition(slides.length);
+      isLoopResetting = true;
+      return;
+    }
+
+    current = index < 0 ? slides.length - 1 : index;
+    updateDots();
+    setTrackPosition(current);
+  };
+
+  updateCarousel(0);
+
+  track.addEventListener("transitionend", () => {
+    if (!isLoopResetting) {
+      return;
+    }
+
+    isLoopResetting = false;
+    setTrackPosition(0, false);
+  });
 
   prev.addEventListener("click", () => updateCarousel(current - 1));
   next.addEventListener("click", () => updateCarousel(current + 1));
@@ -271,7 +314,7 @@ if (belarusMapRoot) {
     }
 
     if (regionMetrics) {
-      const metrics = details.metrics || defaultRegion.metrics;
+      const metrics = (details.metrics || defaultRegion.metrics).slice(0, 2);
 
       regionMetrics.replaceChildren();
       metrics.forEach(([value, label]) => {
@@ -303,14 +346,14 @@ if (belarusMapRoot) {
     if (geometry.type === "Polygon") {
       return {
         ...geometry,
-        coordinates: geometry.coordinates.map((ring) => ring.slice().reverse()),
+        coordinates: [geometry.coordinates[0].slice().reverse()],
       };
     }
 
     if (geometry.type === "MultiPolygon") {
       return {
         ...geometry,
-        coordinates: geometry.coordinates.map((polygon) => polygon.map((ring) => ring.slice().reverse())),
+        coordinates: geometry.coordinates.map((polygon) => [polygon[0].slice().reverse()]),
       };
     }
 
@@ -331,7 +374,7 @@ if (belarusMapRoot) {
       ...geoData,
       features: geoData.features.map(normalizeFeature),
     };
-    const projection = d3Api.geoMercator().fitExtent([[88, 72], [642, 486]], mapData);
+    const projection = d3Api.geoMercator().fitExtent([[58, 44], [704, 526]], mapData);
     const path = d3Api.geoPath(projection);
     const svg = d3Api.select(belarusMapRoot).select(".belarus-map");
     const haloLayer = svg.select("[data-belarus-halo]");
@@ -428,6 +471,237 @@ if (belarusMapRoot) {
 
     if (loader) {
       loader.textContent = "Карта временно недоступна";
+    }
+  }
+}
+
+const belarusGlobeCanvas = document.querySelector("[data-belarus-globe]");
+
+if (belarusGlobeCanvas) {
+  const d3Api = window.d3;
+  const worldData = window.OSSNOVA_WORLD_COUNTRIES;
+  const globeSection = belarusGlobeCanvas.closest(".belarus-network");
+  const context = belarusGlobeCanvas.getContext("2d", { alpha: true });
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (d3Api && worldData && Array.isArray(worldData.features) && context) {
+    const sphere = { type: "Sphere" };
+    const countries = {
+      type: "FeatureCollection",
+      features: worldData.features,
+    };
+    const belarusFeature = worldData.features.find((feature) => feature.properties && feature.properties.name === "Belarus");
+    const belarusCenter = belarusFeature ? d3Api.geoCentroid(belarusFeature) : null;
+    const graticule = d3Api.geoGraticule10();
+    const projection = d3Api.geoOrthographic().clipAngle(90).precision(0.7);
+    const path = d3Api.geoPath(projection, context);
+    const baseRotation = [8, -50, 0];
+    const orbitDuration = 320000;
+    const frameDelay = 1000 / 20;
+    let animationFrame = 0;
+    let canvasWidth = 1;
+    let canvasHeight = 1;
+    let dpr = 1;
+    let lastFrameAt = 0;
+    let isVisible = true;
+    let startTime = performance.now();
+
+    const drawGlobe = (time = performance.now()) => {
+      const size = Math.min(canvasWidth, canvasHeight);
+      const rotationOffset = ((time - startTime) / orbitDuration) * 360;
+
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      context.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      projection
+        .translate([canvasWidth / 2, canvasHeight / 2])
+        .scale(size * 0.47)
+        .rotate([baseRotation[0] - rotationOffset, baseRotation[1], baseRotation[2]]);
+
+      const oceanGradient = context.createRadialGradient(
+        canvasWidth * 0.4,
+        canvasHeight * 0.28,
+        size * 0.04,
+        canvasWidth * 0.5,
+        canvasHeight * 0.52,
+        size * 0.52,
+      );
+
+      oceanGradient.addColorStop(0, "rgba(255, 255, 255, 0.92)");
+      oceanGradient.addColorStop(0.52, "rgba(236, 241, 247, 0.58)");
+      oceanGradient.addColorStop(0.86, "rgba(245, 220, 228, 0.28)");
+      oceanGradient.addColorStop(1, "rgba(200, 16, 46, 0.05)");
+
+      context.save();
+
+      context.beginPath();
+      path(sphere);
+      context.fillStyle = oceanGradient;
+      context.fill();
+      context.lineWidth = 2;
+      context.strokeStyle = "rgba(185, 14, 47, 0.08)";
+      context.stroke();
+
+      context.beginPath();
+      path(graticule);
+      context.lineWidth = 1;
+      context.strokeStyle = "rgba(102, 112, 133, 0.085)";
+      context.stroke();
+
+      context.beginPath();
+      path(countries);
+      context.fillStyle = "rgba(184, 194, 207, 0.34)";
+      context.fill();
+      context.lineWidth = 1.05;
+      context.strokeStyle = "rgba(116, 126, 143, 0.22)";
+      context.stroke();
+
+      if (belarusFeature && belarusCenter) {
+        const globeCenter = [-projection.rotate()[0], -projection.rotate()[1]];
+        const belarusVisible = d3Api.geoDistance(belarusCenter, globeCenter) < Math.PI / 2;
+
+        context.save();
+        context.beginPath();
+        path(belarusFeature);
+        context.shadowColor = "rgba(200, 16, 46, 0.34)";
+        context.shadowBlur = Math.max(10, size * 0.018);
+        context.fillStyle = "rgba(200, 16, 46, 0.86)";
+        context.fill();
+        context.lineWidth = 1.55;
+        context.strokeStyle = "rgba(185, 14, 47, 0.9)";
+        context.stroke();
+        context.restore();
+
+        if (belarusVisible) {
+          const marker = projection(belarusCenter);
+
+          if (marker) {
+            const markerRadius = Math.max(5.5, size * 0.009);
+            const haloRadius = markerRadius * 3.2;
+
+            context.save();
+            context.beginPath();
+            context.arc(marker[0], marker[1], haloRadius, 0, Math.PI * 2);
+            context.fillStyle = "rgba(200, 16, 46, 0.18)";
+            context.fill();
+
+            context.beginPath();
+            context.arc(marker[0], marker[1], markerRadius, 0, Math.PI * 2);
+            context.fillStyle = "rgba(200, 16, 46, 0.94)";
+            context.fill();
+            context.lineWidth = 1.1;
+            context.strokeStyle = "rgba(255, 255, 255, 0.72)";
+            context.stroke();
+            context.restore();
+          }
+        }
+      }
+
+      context.beginPath();
+      path(sphere);
+      context.lineWidth = 1.8;
+      context.strokeStyle = "rgba(185, 14, 47, 0.11)";
+      context.stroke();
+
+      context.restore();
+
+      if (globeSection) {
+        globeSection.classList.add("is-globe-ready");
+      }
+    };
+
+    const resizeGlobe = () => {
+      const rect = belarusGlobeCanvas.getBoundingClientRect();
+      const nextWidth = Math.max(1, Math.round(rect.width));
+      const nextHeight = Math.max(1, Math.round(rect.height));
+      const nextDpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+      if (nextWidth === canvasWidth && nextHeight === canvasHeight && nextDpr === dpr) {
+        return;
+      }
+
+      canvasWidth = nextWidth;
+      canvasHeight = nextHeight;
+      dpr = nextDpr;
+      belarusGlobeCanvas.width = Math.round(canvasWidth * dpr);
+      belarusGlobeCanvas.height = Math.round(canvasHeight * dpr);
+      drawGlobe();
+    };
+
+    const stopGlobe = () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+      }
+    };
+
+    const tickGlobe = (time) => {
+      animationFrame = 0;
+
+      if (reducedMotion.matches || document.hidden || !isVisible) {
+        return;
+      }
+
+      if (time - lastFrameAt >= frameDelay) {
+        lastFrameAt = time;
+        drawGlobe(time);
+      }
+
+      animationFrame = requestAnimationFrame(tickGlobe);
+    };
+
+    const startGlobe = () => {
+      if (!animationFrame && !reducedMotion.matches && !document.hidden && isVisible) {
+        animationFrame = requestAnimationFrame(tickGlobe);
+      }
+    };
+
+    const handleMotionChange = () => {
+      stopGlobe();
+      drawGlobe();
+      startGlobe();
+    };
+
+    resizeGlobe();
+
+    if ("ResizeObserver" in window) {
+      const resizeObserver = new ResizeObserver(resizeGlobe);
+      resizeObserver.observe(belarusGlobeCanvas);
+    } else {
+      window.addEventListener("resize", resizeGlobe);
+    }
+
+    if ("IntersectionObserver" in window && globeSection) {
+      const visibilityObserver = new IntersectionObserver(
+        ([entry]) => {
+          isVisible = entry.isIntersecting;
+
+          if (isVisible) {
+            startGlobe();
+          } else {
+            stopGlobe();
+          }
+        },
+        { threshold: 0.04 },
+      );
+
+      visibilityObserver.observe(globeSection);
+    } else {
+      startGlobe();
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        stopGlobe();
+      } else {
+        startGlobe();
+      }
+    });
+
+    if (reducedMotion.addEventListener) {
+      reducedMotion.addEventListener("change", handleMotionChange);
+    } else if (reducedMotion.addListener) {
+      reducedMotion.addListener(handleMotionChange);
     }
   }
 }

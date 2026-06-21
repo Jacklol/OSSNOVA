@@ -8,7 +8,7 @@
       name="description"
       content="Инновационные решения OSSNOVA для офтальмологии и кардиологии: интраокулярные линзы, медицинские устройства и оборудование нового поколения."
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=no-scroll-reveal-1" />
   </head>
   <body>
     <header class="site-header">
@@ -162,10 +162,16 @@
       </section>
 
       <section class="belarus-network" aria-labelledby="belarus-title">
+        <canvas class="belarus-network__globe" data-belarus-globe aria-hidden="true"></canvas>
         <div class="section-shell belarus-network__shell">
           <div class="belarus-network__copy">
             <p class="section-kicker">География OSSNOVA</p>
-            <h2 id="belarus-title">Беларусь в сети OSSNOVA</h2>
+            <h2 id="belarus-title" class="belarus-network__title">
+              <span>Беларусь в сети</span>
+              <span class="belarus-title-logo" aria-label="OSSNOVA">
+                <img class="brand-wordmark" src="assets/logo-ossnova-figma.svg" alt="" />
+              </span>
+            </h2>
             <p>
               Мы развиваем партнерскую сеть по всей стране: от центрального офиса в Минске до
               региональных клиник, где важны точность поставок, обучение специалистов и быстрая
@@ -392,6 +398,9 @@
       </div>
       <div class="footer-bottom">
         <p>© 2026 OSSNOVA. Все права защищены.</p>
+        <p class="footer-credit footer-credit-bottom">
+          Разработано by <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
+        </p>
         <div>
           <a href="#">LinkedIn</a>
           <a href="#">Twitter</a>
@@ -400,7 +409,8 @@
     </footer>
 
     <script src="assets/d3.v7.min.js"></script>
+    <script src="assets/world-countries.js"></script>
     <script src="assets/belarus-adm1.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=no-scroll-reveal-1"></script>
   </body>
 </html>
