@@ -723,6 +723,10 @@ summary {
   background: #d9d9d9;
 }
 
+.partner-chip b {
+  font-weight: inherit;
+}
+
 @keyframes partnersMarquee {
   from {
     transform: translate3d(0, 0, 0);

@@ -3,14 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>О компании OSSNOVA</title>
+    <title data-i18n="meta.about.title">О компании OSSNOVA</title>
     <meta
       name="description"
       content="О компании OSSNOVA: медицинские технологии, международная логистика, решения для офтальмологии и кардиологии."
+      data-i18n-content="meta.about.description"
     />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=ossnova-favicon-1" />
     <meta name="theme-color" content="#b90e2f" />
-    <link rel="stylesheet" href="styles.css?v=contact-modal-4" />
+    <link rel="stylesheet" href="styles.css?v=i18n-1" />
   </head>
   <body>
     <header class="site-header">
@@ -18,21 +19,21 @@
         <span class="brand-logo" aria-hidden="true">
           <img class="brand-wordmark" src="assets/logo-ossnova-figma.svg" alt="" />
           <img class="brand-line" src="assets/logo-line-figma.svg" alt="" />
-          <span class="brand-tagline">Medical technologies for quality of life</span>
+          <span class="brand-tagline" data-i18n="common.brand.tagline">Medical technologies for quality of life</span>
         </span>
       </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню" data-i18n-aria-label="common.nav.openMenu">
         <span></span>
         <span></span>
         <span></span>
       </button>
-      <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
-        <a href="index.html">Главная</a>
-        <a href="ophthalmology.html">Офтальмология</a>
-        <a href="cardiology.html">Кардиология</a>
-        <a href="about.html" aria-current="page">О компании</a>
-        <a href="contact.html">Контакты</a>
-        <a href="#" lang="en">ENG</a>
+      <nav class="site-nav" id="site-nav" aria-label="Основная навигация" data-i18n-aria-label="common.nav.label">
+        <a href="index.html" data-i18n="common.nav.home">Главная</a>
+        <a href="ophthalmology.html" data-i18n="common.nav.ophthalmology">Офтальмология</a>
+        <a href="cardiology.html" data-i18n="common.nav.cardiology">Кардиология</a>
+        <a href="about.html" aria-current="page" data-i18n="common.nav.about">О компании</a>
+        <a href="contact.html" data-i18n="common.nav.contact">Контакты</a>
+        <a href="#" lang="en" data-language-toggle>ENG</a>
       </nav>
     </header>
 
@@ -42,8 +43,8 @@
           <img src="assets/about-figma-hero.png" alt="" />
         </div>
         <div class="about-hero-copy">
-          <h1 id="about-title">О компании <span>OSS</span>NOVA</h1>
-          <p>
+          <h1 id="about-title" data-i18n-html="about.hero.title">О компании <span>OSS</span>NOVA</h1>
+          <p data-i18n="about.hero.text">
             Мы поставляем передовые медицинские технологии с 2006 года. Начав путь как небольшой
             дистрибьютор, мы стали ведущим поставщиком инновационных решений для хирургии глаза и
             сердца в России и за рубежом.
@@ -51,39 +52,39 @@
         </div>
       </section>
 
-      <dl class="about-stats" aria-label="Ключевые факты">
+      <dl class="about-stats" aria-label="Ключевые факты" data-i18n-aria-label="home.about.stats.label">
         <div>
-          <dt>9,2 млн</dt>
-          <dd>население страны</dd>
+          <dt><span data-i18n="home.about.stats.population.value">9,2 млн</span></dt>
+          <dd><span data-i18n="home.about.stats.population.label">население страны</span></dd>
         </div>
         <div>
-          <dt>Минск</dt>
-          <dd>столица и крупнейший город</dd>
+          <dt><span data-i18n="home.about.stats.minsk.value">Минск</span></dt>
+          <dd><span data-i18n="home.about.stats.minsk.label">столица и крупнейший город</span></dd>
         </div>
         <div>
-          <dt>Центр Европы</dt>
-          <dd>удобная логистика и международные связи</dd>
+          <dt><span data-i18n="home.about.stats.center.value">Центр Европы</span></dt>
+          <dd><span data-i18n="home.about.stats.center.label">удобная логистика и международные связи</span></dd>
         </div>
         <div>
-          <dt>30+ стран</dt>
-          <dd>потенциал для партнёрства и поставок</dd>
+          <dt><span data-i18n="home.about.stats.partners.value">30+ стран</span></dt>
+          <dd><span data-i18n="home.about.stats.partners.label">потенциал для партнёрства и поставок</span></dd>
         </div>
         <div>
-          <dt>207,6 тыс. км²</dt>
-          <dd>площадь страны</dd>
+          <dt><span data-i18n="home.about.stats.area.value">207,6 тыс. км²</span></dt>
+          <dd><span data-i18n="home.about.stats.area.label">площадь страны</span></dd>
         </div>
       </dl>
 
       <section class="about-red-section" aria-labelledby="about-company-heading">
         <div class="about-red-grid">
           <div>
-            <h2 id="about-company-heading">О компании</h2>
-            <p>
+            <h2 id="about-company-heading" data-i18n="about.section.title">О компании</h2>
+            <p data-i18n="about.section.text1">
               Мы поставляем передовые медицинские технологии с 2006 года. Начав путь как небольшой
               дистрибьютор, мы стали ведущим поставщиком инновационных решений для хирургии глаза и
               сердца в России и за рубежом.
             </p>
-            <p>
+            <p data-i18n="about.section.text2">
               Поставляем сертифицированные интраокулярные линзы, РЧА-катетеры нового поколения и
               медицинское оборудование для офтальмологических и кардиологических клиник. Мы
               тщательно отбираем производителей, чьи разработки доказали эффективность в ведущих
@@ -91,23 +92,22 @@
             </p>
           </div>
           <div>
-            <p>
-              Поставляем сертифицированные интраокулярные линзы, РЧА-катетеры нового поколения и
-              медицинское оборудование для офтальмологических и кардиологических клиник. Мы
-              тщательно отбираем производителей, чьи разработки доказали эффективность в ведущих
-              мировых центрах.
+            <p data-i18n="about.section.text3">
+              OSSNOVA - это внедрение стандартов будущего в ежедневную практику врачей по всей
+              Беларуси. Мы тщательно отбираем производителей, чьи разработки доказали свою
+              эффективность в ведущих мировых центрах.
             </p>
           </div>
         </div>
       </section>
 
       <figure class="about-quote">
-        <blockquote>
+        <blockquote data-i18n="about.quote.text">
           «Наша цель - обеспечить каждого хирурга инструментами, которые меняют жизни пациентов. Мы
           верим, что технологии должны служить человеку, возвращая зрение и здоровье сердца.»
         </blockquote>
         <span aria-hidden="true"></span>
-        <figcaption>
+        <figcaption data-i18n="about.quote.caption">
           OSSNOVA - это не просто поставки. Это внедрение стандартов будущего в ежедневную практику
           врачей по всей Беларуси. Мы тщательно отбираем производителей, чьи разработки доказали
           свою эффективность в ведущих мировых центрах.
@@ -121,33 +121,33 @@
           <span class="footer-logo" aria-label="OSSNOVA">
             <img class="brand-wordmark" src="assets/logo-ossnova-figma.svg" alt="" />
             <img class="brand-line" src="assets/logo-line-figma.svg" alt="" />
-            <small>Medical technologies for quality of life</small>
+            <small data-i18n="common.brand.tagline">Medical technologies for quality of life</small>
           </span>
-          <p>Инновационные медицинские решения для повышения качества жизни пациентов по всему миру</p>
+          <p data-i18n="common.footer.description">Инновационные медицинские решения для повышения качества жизни пациентов по всему миру</p>
           <p class="footer-credit">
-            Разработано by <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
+            <span data-i18n="common.footer.developed">Разработано by</span> <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
           </p>
         </div>
         <div class="footer-links">
           <div>
-            <h2>Разделы</h2>
-            <a href="ophthalmology.html">Офтальмология</a>
-            <a href="cardiology.html">Кардиология</a>
-            <a href="about.html">О компании</a>
+            <h2 data-i18n="common.footer.sections">Разделы</h2>
+            <a href="ophthalmology.html" data-i18n="common.nav.ophthalmology">Офтальмология</a>
+            <a href="cardiology.html" data-i18n="common.nav.cardiology">Кардиология</a>
+            <a href="about.html" data-i18n="common.nav.about">О компании</a>
           </div>
           <div>
-            <h2>Контакты</h2>
+            <h2 data-i18n="common.footer.contacts">Контакты</h2>
             <a href="https://www.google.com/maps/search/?api=1&query=%D1%83%D0%BB.%20%D0%9B%D0%B5%D0%B2%D0%BA%D0%BE%D0%B2%D0%B0%2024%2C%20%D0%9C%D0%B8%D0%BD%D1%81%D0%BA%2C%20%D0%91%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C">
-              ул. Левкова, 24, Минск, Беларусь
+              <span data-i18n="common.address.levkova">ул. Левкова, 24, Минск, Беларусь</span>
             </a>
             <a href="mailto:info@ossnova.pro">info@ossnova.pro</a>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2026 OSSNOVA. Все права защищены.</p>
+        <p data-i18n="common.footer.rights">© 2026 OSSNOVA. Все права защищены.</p>
         <p class="footer-credit footer-credit-bottom">
-          Разработано by <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
+          <span data-i18n="common.footer.developed">Разработано by</span> <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
         </p>
         <div>
           <a href="#">LinkedIn</a>
@@ -156,6 +156,6 @@
       </div>
     </footer>
 
-    <script src="script.js?v=contact-modal-4"></script>
+    <script src="script.js?v=i18n-1"></script>
   </body>
 </html>

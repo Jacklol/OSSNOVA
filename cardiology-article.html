@@ -3,14 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Нарушения ритма сердца OSSNOVA</title>
+    <title data-i18n="meta.cardiologyArticle.title">Нарушения ритма сердца OSSNOVA</title>
     <meta
       name="description"
       content="Статья OSSNOVA о нарушениях ритма сердца: виды аритмий, диагностика и современные подходы к лечению."
+      data-i18n-content="meta.cardiologyArticle.description"
     />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=ossnova-favicon-1" />
     <meta name="theme-color" content="#b90e2f" />
-    <link rel="stylesheet" href="styles.css?v=contact-modal-4" />
+    <link rel="stylesheet" href="styles.css?v=i18n-1" />
   </head>
   <body>
     <header class="site-header">
@@ -18,21 +19,21 @@
         <span class="brand-logo" aria-hidden="true">
           <img class="brand-wordmark" src="assets/logo-ossnova-figma.svg" alt="" />
           <img class="brand-line" src="assets/logo-line-figma.svg" alt="" />
-          <span class="brand-tagline">Medical technologies for quality of life</span>
+          <span class="brand-tagline" data-i18n="common.brand.tagline">Medical technologies for quality of life</span>
         </span>
       </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню" data-i18n-aria-label="common.nav.openMenu">
         <span></span>
         <span></span>
         <span></span>
       </button>
-      <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
-        <a href="index.html">Главная</a>
-        <a href="ophthalmology.html">Офтальмология</a>
-        <a href="cardiology.html" aria-current="page">Кардиология</a>
-        <a href="about.html">О компании</a>
-        <a href="contact.html">Контакты</a>
-        <a href="#" lang="en">ENG</a>
+      <nav class="site-nav" id="site-nav" aria-label="Основная навигация" data-i18n-aria-label="common.nav.label">
+        <a href="index.html" data-i18n="common.nav.home">Главная</a>
+        <a href="ophthalmology.html" data-i18n="common.nav.ophthalmology">Офтальмология</a>
+        <a href="cardiology.html" aria-current="page" data-i18n="common.nav.cardiology">Кардиология</a>
+        <a href="about.html" data-i18n="common.nav.about">О компании</a>
+        <a href="contact.html" data-i18n="common.nav.contact">Контакты</a>
+        <a href="#" lang="en" data-language-toggle>ENG</a>
       </nav>
     </header>
 
@@ -43,52 +44,52 @@
         </div>
         <div class="detail-shell">
           <div class="detail-intro">
-            <h1 id="rhythm-title">Какие нарушения ритма сердца бывают</h1>
-            <p>
+            <h1 id="rhythm-title" data-i18n="article.rhythm.title">Какие нарушения ритма сердца бывают</h1>
+            <p data-i18n="article.rhythm.intro1">
               Аритмия - это состояние, при котором сердце сокращается слишком быстро, слишком
               медленно или нерегулярно. Одни нарушения ритма ощущаются как краткий сбой, другие
               требуют углубленной диагностики и наблюдения специалиста.
             </p>
-            <p>
+            <p data-i18n="article.rhythm.intro2">
               Материал помогает ориентироваться в базовых терминах и понять, почему современные
               методы диагностики и лечения подбираются индивидуально под клиническую задачу.
             </p>
           </div>
 
           <section class="detail-block" aria-labelledby="rhythm-types-title">
-            <h2 id="rhythm-types-title">Основные виды нарушений</h2>
-            <p class="detail-subtitle">Чаще всего в клинической практике обсуждают:</p>
+            <h2 id="rhythm-types-title" data-i18n="article.rhythm.types.title">Основные виды нарушений</h2>
+            <p class="detail-subtitle" data-i18n="article.rhythm.types.subtitle">Чаще всего в клинической практике обсуждают:</p>
             <ul class="star-list">
-              <li><strong>Экстрасистолию:</strong> внеочередные сокращения, которые пациент может ощущать как перебой.</li>
-              <li><strong>Тахикардию:</strong> учащенный ритм, возникающий приступами или сохраняющийся длительно.</li>
-              <li><strong>Брадикардию:</strong> замедленный ритм, который оценивают вместе с симптомами и состоянием пациента.</li>
-              <li><strong>Фибрилляцию предсердий:</strong> нерегулярный ритм, требующий внимательной диагностики и контроля рисков.</li>
+              <li data-i18n-html="article.rhythm.types.extrasystole"><strong>Экстрасистолию:</strong> внеочередные сокращения, которые пациент может ощущать как перебой.</li>
+              <li data-i18n-html="article.rhythm.types.tachycardia"><strong>Тахикардию:</strong> учащенный ритм, возникающий приступами или сохраняющийся длительно.</li>
+              <li data-i18n-html="article.rhythm.types.bradycardia"><strong>Брадикардию:</strong> замедленный ритм, который оценивают вместе с симптомами и состоянием пациента.</li>
+              <li data-i18n-html="article.rhythm.types.afib"><strong>Фибрилляцию предсердий:</strong> нерегулярный ритм, требующий внимательной диагностики и контроля рисков.</li>
             </ul>
           </section>
 
           <section class="detail-block" aria-labelledby="rhythm-diagnostics-title">
-            <h2 id="rhythm-diagnostics-title">Как оценивают ритм</h2>
-            <p>
+            <h2 id="rhythm-diagnostics-title" data-i18n="article.rhythm.diagnostics.title">Как оценивают ритм</h2>
+            <p data-i18n="article.rhythm.diagnostics.text">
               Для первичной оценки используют ЭКГ, суточное мониторирование и данные о симптомах:
               частоте приступов, нагрузке, сопутствующих заболеваниях и принимаемых препаратах.
               Итоговая тактика зависит от причины нарушения, его частоты и влияния на качество жизни.
             </p>
             <ol class="detail-steps">
-              <li>Фиксируют жалобы и обстоятельства появления перебоев.</li>
-              <li>Проводят инструментальную диагностику ритма.</li>
-              <li>Оценивают риски и необходимость дальнейшего наблюдения.</li>
-              <li>Подбирают медикаментозную или интервенционную тактику, если она показана.</li>
+              <li data-i18n="article.rhythm.diagnostics.step1">Фиксируют жалобы и обстоятельства появления перебоев.</li>
+              <li data-i18n="article.rhythm.diagnostics.step2">Проводят инструментальную диагностику ритма.</li>
+              <li data-i18n="article.rhythm.diagnostics.step3">Оценивают риски и необходимость дальнейшего наблюдения.</li>
+              <li data-i18n="article.rhythm.diagnostics.step4">Подбирают медикаментозную или интервенционную тактику, если она показана.</li>
             </ol>
           </section>
 
           <section class="detail-block" aria-labelledby="rhythm-treatment-title">
-            <h2 id="rhythm-treatment-title">Современные подходы к лечению</h2>
-            <p>
+            <h2 id="rhythm-treatment-title" data-i18n="article.rhythm.treatment.title">Современные подходы к лечению</h2>
+            <p data-i18n="article.rhythm.treatment.text">
               В одних случаях достаточно наблюдения и коррекции факторов риска, в других применяют
               лекарственную терапию, катетерные технологии или имплантируемые устройства. Решение
               принимает врач после диагностики и оценки состояния пациента.
             </p>
-            <p class="detail-note">
+            <p class="detail-note" data-i18n="article.rhythm.note">
               Информация носит справочный характер и не заменяет консультацию врача.
             </p>
           </section>
@@ -102,35 +103,35 @@
           <span class="footer-logo" aria-label="OSSNOVA">
             <img class="brand-wordmark" src="assets/logo-ossnova-figma.svg" alt="" />
             <img class="brand-line" src="assets/logo-line-figma.svg" alt="" />
-            <small>Medical technologies for quality of life</small>
+            <small data-i18n="common.brand.tagline">Medical technologies for quality of life</small>
           </span>
-          <p>Инновационные медицинские решения для повышения качества жизни пациентов по всему миру</p>
+          <p data-i18n="common.footer.description">Инновационные медицинские решения для повышения качества жизни пациентов по всему миру</p>
           <p class="footer-credit">
-            Разработано by <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
+            <span data-i18n="common.footer.developed">Разработано by</span> <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
           </p>
         </div>
         <div class="footer-links">
           <div>
-            <h2>Разделы</h2>
-            <a href="index.html">Главная</a>
-            <a href="ophthalmology.html">Офтальмология</a>
-            <a href="cardiology.html">Кардиология</a>
-            <a href="about.html">О компании</a>
-            <a href="contact.html">Контакты</a>
+            <h2 data-i18n="common.footer.sections">Разделы</h2>
+            <a href="index.html" data-i18n="common.nav.home">Главная</a>
+            <a href="ophthalmology.html" data-i18n="common.nav.ophthalmology">Офтальмология</a>
+            <a href="cardiology.html" data-i18n="common.nav.cardiology">Кардиология</a>
+            <a href="about.html" data-i18n="common.nav.about">О компании</a>
+            <a href="contact.html" data-i18n="common.nav.contact">Контакты</a>
           </div>
           <div>
-            <h2>Контакты</h2>
+            <h2 data-i18n="common.footer.contacts">Контакты</h2>
             <a href="https://www.google.com/maps/search/?api=1&query=%D1%83%D0%BB.%20%D0%9B%D0%B5%D0%B2%D0%BA%D0%BE%D0%B2%D0%B0%2024%2C%20%D0%9C%D0%B8%D0%BD%D1%81%D0%BA%2C%20%D0%91%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C">
-              ул. Левкова, 24, Минск, Беларусь
+              <span data-i18n="common.address.levkova">ул. Левкова, 24, Минск, Беларусь</span>
             </a>
             <a href="mailto:info@ossnova.pro">info@ossnova.pro</a>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2026 OSSNOVA. Все права защищены.</p>
+        <p data-i18n="common.footer.rights">© 2026 OSSNOVA. Все права защищены.</p>
         <p class="footer-credit footer-credit-bottom">
-          Разработано by <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
+          <span data-i18n="common.footer.developed">Разработано by</span> <a href="https://localmindstudio.site/" target="_blank" rel="noopener">localmindstudio</a>
         </p>
         <div>
           <a href="#">LinkedIn</a>
@@ -139,6 +140,6 @@
       </div>
     </footer>
 
-    <script src="script.js?v=contact-modal-4"></script>
+    <script src="script.js?v=i18n-1"></script>
   </body>
 </html>

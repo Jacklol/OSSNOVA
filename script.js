@@ -1,3 +1,115 @@
+const i18nStorageKey = "ossnova-language";
+const i18nSupportedLanguages = ["ru", "en"];
+let currentLanguage = "ru";
+let currentDictionary = {};
+
+const getInitialLanguage = () => {
+  const languageFromUrl = new URLSearchParams(window.location.search).get("lang");
+  const storedLanguage = window.localStorage.getItem(i18nStorageKey);
+  const pageLanguage = document.documentElement.lang;
+  const candidate = languageFromUrl || storedLanguage || pageLanguage || "ru";
+
+  return i18nSupportedLanguages.includes(candidate) ? candidate : "ru";
+};
+
+const getI18nText = (key, fallback = "") => {
+  if (!key) {
+    return fallback;
+  }
+
+  return currentDictionary[key] ?? fallback;
+};
+
+const loadI18nDictionary = async (language) => {
+  const response = await fetch(`locales/${language}.json`, { cache: "no-cache" });
+
+  if (!response.ok) {
+    throw new Error(`Could not load ${language} dictionary`);
+  }
+
+  return response.json();
+};
+
+const updateLanguageUrl = (language) => {
+  const url = new URL(window.location.href);
+
+  if (language === "ru") {
+    url.searchParams.delete("lang");
+  } else {
+    url.searchParams.set("lang", language);
+  }
+
+  window.history.replaceState(null, "", url);
+};
+
+const applyI18n = () => {
+  document.documentElement.lang = currentLanguage;
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = getI18nText(element.dataset.i18n, element.textContent);
+  });
+
+  document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+    element.innerHTML = getI18nText(element.dataset.i18nHtml, element.innerHTML);
+  });
+
+  [
+    ["i18nContent", "content"],
+    ["i18nAriaLabel", "aria-label"],
+    ["i18nAlt", "alt"],
+    ["i18nTitle", "title"],
+    ["i18nPlaceholder", "placeholder"],
+  ].forEach(([datasetKey, attributeName]) => {
+    document.querySelectorAll(`[data-${datasetKey.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}]`).forEach((element) => {
+      const key = element.dataset[datasetKey];
+      const fallback = element.getAttribute(attributeName) || "";
+      element.setAttribute(attributeName, getI18nText(key, fallback));
+    });
+  });
+
+  document.querySelectorAll("[data-language-toggle]").forEach((toggle) => {
+    const nextLanguage = currentLanguage === "ru" ? "en" : "ru";
+    const labelKey = nextLanguage === "en" ? "common.language.switchToEnglish.label" : "common.language.switchToRussian.label";
+    const ariaKey = nextLanguage === "en" ? "common.language.switchToEnglish.aria" : "common.language.switchToRussian.aria";
+
+    toggle.textContent = getI18nText(labelKey, nextLanguage.toUpperCase());
+    toggle.lang = nextLanguage;
+    toggle.setAttribute("aria-label", getI18nText(ariaKey, toggle.textContent));
+  });
+};
+
+const setLanguage = async (language, { persist = true } = {}) => {
+  const nextLanguage = i18nSupportedLanguages.includes(language) ? language : "ru";
+
+  try {
+    currentDictionary = await loadI18nDictionary(nextLanguage);
+    currentLanguage = nextLanguage;
+
+    if (persist) {
+      window.localStorage.setItem(i18nStorageKey, nextLanguage);
+      updateLanguageUrl(nextLanguage);
+    }
+
+    applyI18n();
+    window.dispatchEvent(new CustomEvent("ossnova:languagechange", { detail: { language: nextLanguage } }));
+  } catch (error) {
+    currentLanguage = "ru";
+    currentDictionary = {};
+  }
+};
+
+const initLanguageToggle = () => {
+  document.querySelectorAll("[data-language-toggle]").forEach((toggle) => {
+    toggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      setLanguage(currentLanguage === "ru" ? "en" : "ru");
+    });
+  });
+};
+
+initLanguageToggle();
+setLanguage(getInitialLanguage(), { persist: Boolean(new URLSearchParams(window.location.search).get("lang")) });
+
 const introMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
 const homeRippleReveal = document.querySelector(".hero-ripple-reveal");
 let introCleanupTimer = 0;
@@ -26,10 +138,17 @@ const navToggle = document.querySelector(".nav-toggle");
 const siteNav = document.querySelector(".site-nav");
 
 if (navToggle && siteNav) {
+  const setNavToggleLabel = (isOpen) => {
+    navToggle.setAttribute(
+      "aria-label",
+      getI18nText(isOpen ? "common.nav.closeMenu" : "common.nav.openMenu", isOpen ? "Закрыть меню" : "Открыть меню")
+    );
+  };
+
   navToggle.addEventListener("click", () => {
     const isOpen = navToggle.getAttribute("aria-expanded") === "true";
     navToggle.setAttribute("aria-expanded", String(!isOpen));
-    navToggle.setAttribute("aria-label", isOpen ? "Открыть меню" : "Закрыть меню");
+    setNavToggleLabel(!isOpen);
     siteNav.classList.toggle("is-open", !isOpen);
     document.body.classList.toggle("is-nav-open", !isOpen);
   });
@@ -37,10 +156,14 @@ if (navToggle && siteNav) {
   siteNav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
       navToggle.setAttribute("aria-expanded", "false");
-      navToggle.setAttribute("aria-label", "Открыть меню");
+      setNavToggleLabel(false);
       siteNav.classList.remove("is-open");
       document.body.classList.remove("is-nav-open");
     });
+  });
+
+  window.addEventListener("ossnova:languagechange", () => {
+    setNavToggleLabel(navToggle.getAttribute("aria-expanded") === "true");
   });
 }
 
@@ -224,98 +347,127 @@ if (belarusMapRoot) {
   const regionDetails = {
     Brest: {
       title: "Брестская область",
+      titleKey: "home.map.regions.brest.title",
       text: "Западное направление: логистика, офтальмологические решения и поддержка партнерских клиник.",
+      textKey: "home.map.regions.brest.text",
       metrics: [
-        ["34", "клиники"],
-        ["820+", "медработников"],
-        ["11", "партнерских точек"],
-        ["6", "обучающих выездов"],
+        ["34", "home.map.metrics.clinics", "клиники"],
+        ["820+", "home.map.metrics.medicalWorkers", "медработников"],
+        ["11", "home.map.metrics.partnerPoints", "партнерских точек"],
+        ["6", "home.map.metrics.trainingVisits", "обучающих выездов"],
       ],
     },
     Vitebsk: {
       title: "Витебская область",
+      titleKey: "home.map.regions.vitebsk.title",
       text: "Северный регион сети: поставки медицинских технологий и сопровождение специалистов на местах.",
+      textKey: "home.map.regions.vitebsk.text",
       metrics: [
-        ["29", "клиник"],
-        ["690+", "медработников"],
-        ["9", "партнерских точек"],
-        ["5", "обучающих выездов"],
+        ["29", "home.map.metrics.clinicsMany", "клиник"],
+        ["690+", "home.map.metrics.medicalWorkers", "медработников"],
+        ["9", "home.map.metrics.partnerPoints", "партнерских точек"],
+        ["5", "home.map.metrics.trainingVisits", "обучающих выездов"],
       ],
     },
     Grodno: {
       title: "Гродненская область",
+      titleKey: "home.map.regions.grodno.title",
       text: "Региональная работа с клиниками, где важны стабильные поставки и обучение врачебных команд.",
+      textKey: "home.map.regions.grodno.text",
       metrics: [
-        ["31", "клиника"],
-        ["760+", "медработников"],
-        ["10", "партнерских точек"],
-        ["5", "обучающих выездов"],
+        ["31", "home.map.metrics.clinic", "клиника"],
+        ["760+", "home.map.metrics.medicalWorkers", "медработников"],
+        ["10", "home.map.metrics.partnerPoints", "партнерских точек"],
+        ["5", "home.map.metrics.trainingVisits", "обучающих выездов"],
       ],
     },
     Gomel: {
       title: "Гомельская область",
+      titleKey: "home.map.regions.gomel.title",
       text: "Юго-восточное покрытие: технологические решения для офтальмологии и кардиологических направлений.",
+      textKey: "home.map.regions.gomel.text",
       metrics: [
-        ["38", "клиник"],
-        ["910+", "медработников"],
-        ["12", "партнерских точек"],
-        ["7", "обучающих выездов"],
+        ["38", "home.map.metrics.clinicsMany", "клиник"],
+        ["910+", "home.map.metrics.medicalWorkers", "медработников"],
+        ["12", "home.map.metrics.partnerPoints", "партнерских точек"],
+        ["7", "home.map.metrics.trainingVisits", "обучающих выездов"],
       ],
     },
     Mogilev: {
       title: "Могилевская область",
+      titleKey: "home.map.regions.mogilev.title",
       text: "Восточная часть партнерской сети: консультации, оборудование и сервисное взаимодействие.",
+      textKey: "home.map.regions.mogilev.text",
       metrics: [
-        ["27", "клиник"],
-        ["640+", "медработников"],
-        ["8", "партнерских точек"],
-        ["4", "обучающих выезда"],
+        ["27", "home.map.metrics.clinicsMany", "клиник"],
+        ["640+", "home.map.metrics.medicalWorkers", "медработников"],
+        ["8", "home.map.metrics.partnerPoints", "партнерских точек"],
+        ["4", "home.map.metrics.trainingVisitsFew", "обучающих выезда"],
       ],
     },
     Minsk: {
       title: "Минская область",
+      titleKey: "home.map.regions.minskRegion.title",
       text: "Центральный регион: связующее звено между столичным офисом и медицинскими учреждениями страны.",
+      textKey: "home.map.regions.minskRegion.text",
       metrics: [
-        ["42", "клиники"],
-        ["1 040+", "медработников"],
-        ["14", "партнерских точек"],
-        ["8", "обучающих выездов"],
+        ["42", "home.map.metrics.clinics", "клиники"],
+        ["1 040+", "home.map.metrics.medicalWorkers", "медработников"],
+        ["14", "home.map.metrics.partnerPoints", "партнерских точек"],
+        ["8", "home.map.metrics.trainingVisits", "обучающих выездов"],
       ],
     },
     "Minsk City": {
       title: "Минск",
+      titleKey: "home.map.regions.minskCity.title",
       text: "Центральный офис OSSNOVA: координация поставок, партнерских проектов и поддержки специалистов.",
+      textKey: "home.map.regions.minskCity.text",
       metrics: [
-        ["58", "клиник"],
-        ["1 480+", "медработников"],
-        ["21", "партнерская точка"],
-        ["12", "обучающих выездов"],
+        ["58", "home.map.metrics.clinicsMany", "клиник"],
+        ["1 480+", "home.map.metrics.medicalWorkers", "медработников"],
+        ["21", "home.map.metrics.partnerPoint", "партнерская точка"],
+        ["12", "home.map.metrics.trainingVisits", "обучающих выездов"],
       ],
     },
   };
 
   const defaultRegion = {
     title: "Беларусь",
+    titleKey: "home.map.panel.defaultTitle",
     text: "Наведите на область на карте, чтобы увидеть информацию о региональном покрытии.",
+    textKey: "home.map.panel.defaultText",
     metrics: [
-      ["259", "клиник"],
-      ["6 340+", "медработников"],
-      ["85", "партнерских точек"],
-      ["47", "обучающих выездов"],
+      ["259", "home.map.metrics.clinicsMany", "клиник"],
+      ["6 340+", "home.map.metrics.medicalWorkers", "медработников"],
+      ["85", "home.map.metrics.partnerPoints", "партнерских точек"],
+      ["47", "home.map.metrics.trainingVisits", "обучающих выездов"],
     ],
   };
+  let activeRegionDetails = defaultRegion;
+
+  const translateMapDetails = (details) => ({
+    title: getI18nText(details.titleKey, details.title || "Беларусь"),
+    text: getI18nText(details.textKey, details.text || ""),
+    metrics: (details.metrics || defaultRegion.metrics).map(([value, labelKey, labelFallback]) => [
+      value,
+      getI18nText(labelKey, labelFallback || labelKey),
+    ]),
+  });
 
   const setPanel = (details = defaultRegion) => {
+    activeRegionDetails = details;
+    const translatedDetails = translateMapDetails(details);
+
     if (regionName) {
-      regionName.textContent = details.title;
+      regionName.textContent = translatedDetails.title;
     }
 
     if (regionText) {
-      regionText.textContent = details.text;
+      regionText.textContent = translatedDetails.text;
     }
 
     if (regionMetrics) {
-      const metrics = (details.metrics || defaultRegion.metrics).slice(0, 2);
+      const metrics = translatedDetails.metrics.slice(0, 2);
 
       regionMetrics.replaceChildren();
       metrics.forEach(([value, label]) => {
@@ -396,11 +548,11 @@ if (belarusMapRoot) {
           .append("g")
           .attr("class", "belarus-region")
           .attr("role", "button")
-          .attr("tabindex", "0")
-          .attr("aria-label", (feature) => {
-            const details = regionDetails[getFeatureName(feature)] || defaultRegion;
-            return details.title;
-          });
+        .attr("tabindex", "0")
+        .attr("aria-label", (feature) => {
+          const details = regionDetails[getFeatureName(feature)] || defaultRegion;
+          return translateMapDetails(details).title;
+        });
 
         group.append("path").attr("class", "belarus-region__shape");
         group.append("path").attr("class", "belarus-region__hit");
@@ -460,18 +612,26 @@ if (belarusMapRoot) {
 
     belarusMapRoot.classList.add("is-loaded");
     svg.attr("data-region-count", mapData.features.length);
+
+    window.addEventListener("ossnova:languagechange", () => {
+      regions.attr("aria-label", (feature) => {
+        const details = regionDetails[getFeatureName(feature)] || defaultRegion;
+        return translateMapDetails(details).title;
+      });
+      setPanel(activeRegionDetails);
+    });
   };
 
   try {
     initBelarusMap();
   } catch (error) {
     setPanel({
-      title: "Карта временно недоступна",
-      text: "Не удалось загрузить интерактивную геометрию. Остальной контент страницы работает без ограничений.",
+      titleKey: "home.map.unavailable.title",
+      textKey: "home.map.unavailable.text",
     });
 
     if (loader) {
-      loader.textContent = "Карта временно недоступна";
+      loader.textContent = getI18nText("home.map.unavailable.title", "Карта временно недоступна");
     }
   }
 }
@@ -1220,11 +1380,12 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-const contactFormSuccessMessage = "Запрос подготовлен. Подключите обработчик формы для отправки данных.";
+const getContactFormSuccessMessage = () =>
+  getI18nText("common.form.status.success", "Запрос подготовлен. Подключите обработчик формы для отправки данных.");
 
 // Реальную отправку формы нужно подключить здесь: функция используется всеми контактными формами.
 const submitContactRequest = async (form, formData) => ({
-  message: contactFormSuccessMessage,
+  message: getContactFormSuccessMessage(),
   form,
   formData,
 });
@@ -1248,13 +1409,13 @@ document.querySelectorAll("[data-contact-form]").forEach((contactForm) => {
       const result = await submitContactRequest(contactForm, new FormData(contactForm));
 
       if (status) {
-        status.textContent = result?.message || contactFormSuccessMessage;
+        status.textContent = result?.message || getContactFormSuccessMessage();
       }
 
       contactForm.reset();
     } catch (error) {
       if (status) {
-        status.textContent = "Не удалось подготовить запрос. Попробуйте еще раз.";
+        status.textContent = getI18nText("common.form.status.error", "Не удалось подготовить запрос. Попробуйте еще раз.");
       }
     } finally {
       if (submitButton) {
