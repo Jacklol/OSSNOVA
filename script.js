@@ -1,109 +1,26 @@
 const introMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-const introDemoButtons = Array.from(document.querySelectorAll("[data-intro-demo]"));
-const heroMosaicReveal = document.querySelector("[data-hero-mosaic]");
-const heroMosaicImage = document.querySelector(".hero-bg");
+const homeRippleReveal = document.querySelector(".hero-ripple-reveal");
 let introCleanupTimer = 0;
-let mosaicResizeTimer = 0;
-
-const buildMosaicTiles = () => {
-  if (!heroMosaicReveal) {
-    return;
-  }
-
-  const cols = window.innerWidth < 700 ? 8 : 15;
-  const rows = window.innerWidth < 700 ? 10 : 8;
-  const rect = heroMosaicReveal.getBoundingClientRect();
-  const tileWidth = rect.width / cols;
-  const tileHeight = rect.height / rows;
-  const cells = [];
-  const fragment = document.createDocumentFragment();
-
-  heroMosaicReveal.replaceChildren();
-  heroMosaicReveal.style.setProperty("--tile-cols", cols);
-  heroMosaicReveal.style.setProperty("--tile-rows", rows);
-  heroMosaicReveal.style.setProperty("--mosaic-width", `${rect.width}px`);
-  heroMosaicReveal.style.setProperty("--mosaic-height", `${rect.height}px`);
-
-  for (let index = 0; index < cols * rows; index += 1) {
-    const rank = Math.sin((index + 1) * 12.9898) * 43758.5453;
-    cells.push({
-      col: index % cols,
-      row: Math.floor(index / cols),
-      rank: rank - Math.floor(rank),
-    });
-  }
-
-  const shuffledCells = cells.slice().sort((a, b) => a.rank - b.rank);
-
-  for (let row = 0; row < rows; row += 1) {
-    for (let col = 0; col < cols; col += 1) {
-      const tile = document.createElement("span");
-      const image = document.createElement("img");
-      const index = row * cols + col;
-      const sourceCell = shuffledCells[index];
-      const left = col * tileWidth;
-      const top = row * tileHeight;
-      const fromX = (sourceCell.col - col) * tileWidth + Math.sin(index * 1.7) * 18;
-      const fromY = (sourceCell.row - row) * tileHeight + Math.cos(index * 1.3) * 18;
-      const distance = Math.hypot(sourceCell.col - col, sourceCell.row - row);
-      const delay = distance * 38 + (index % 9) * 22;
-
-      tile.className = "hero-mosaic-tile";
-      tile.style.setProperty("--tile-left", `${left}px`);
-      tile.style.setProperty("--tile-top", `${top}px`);
-      tile.style.setProperty("--tile-width", `${tileWidth + 1}px`);
-      tile.style.setProperty("--tile-height", `${tileHeight + 1}px`);
-      tile.style.setProperty("--delay", `${delay}ms`);
-      tile.style.setProperty("--from-x", `${fromX}px`);
-      tile.style.setProperty("--from-y", `${fromY}px`);
-      tile.style.setProperty("--rotate", `${(Math.sin(index * 2.3) * 16).toFixed(1)}deg`);
-
-      image.className = "hero-mosaic-image";
-      image.src = heroMosaicImage ? heroMosaicImage.getAttribute("src") : "assets/hero.png";
-      image.alt = "";
-      image.draggable = false;
-      tile.append(image);
-      fragment.append(tile);
-    }
-  }
-
-  heroMosaicReveal.append(fragment);
-};
-
-buildMosaicTiles();
-
-window.addEventListener("resize", () => {
-  window.clearTimeout(mosaicResizeTimer);
-  mosaicResizeTimer = window.setTimeout(buildMosaicTiles, 160);
-}, { passive: true });
 
 const stopHomeIntro = () => {
   window.clearTimeout(introCleanupTimer);
   introCleanupTimer = 0;
-  document.body.classList.remove("home-intro");
   document.body.classList.remove("home-ripple-intro");
-  document.body.classList.remove("home-mosaic-intro");
 };
 
-const startIntroDemo = (variant) => {
-  if (introMotionPreference.matches) {
-    stopHomeIntro();
+const startHomeIntro = () => {
+  if (!homeRippleReveal || introMotionPreference.matches) {
     return;
   }
 
-  const introClass = variant === "3" ? "home-mosaic-intro" : variant === "2" ? "home-ripple-intro" : "home-intro";
-  const eventName =
-    variant === "3" ? "home-mosaic-intro:start" : variant === "2" ? "home-ripple-intro:start" : "home-intro:start";
-
   stopHomeIntro();
-  if (variant === "3") {
-    buildMosaicTiles();
-  }
   void document.body.offsetWidth;
-  document.body.classList.add(introClass);
-  window.dispatchEvent(new CustomEvent(eventName));
-  introCleanupTimer = window.setTimeout(stopHomeIntro, variant === "3" ? 3100 : variant === "2" ? 2600 : 2800);
+  document.body.classList.add("home-ripple-intro");
+  window.dispatchEvent(new CustomEvent("home-ripple-intro:start"));
+  introCleanupTimer = window.setTimeout(stopHomeIntro, 2600);
 };
+
+window.addEventListener("load", startHomeIntro, { once: true });
 
 const navToggle = document.querySelector(".nav-toggle");
 const siteNav = document.querySelector(".site-nav");
@@ -127,18 +44,102 @@ if (navToggle && siteNav) {
   });
 }
 
-introDemoButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    startIntroDemo(button.dataset.introDemo);
+const setupSoftReveals = () => {
+  const targets = [];
+  const targetSet = new Set();
+  const selectors = [
+    ".partners",
+    ".solution-card:not([aria-hidden='true']) .solution-media",
+    ".solution-card:not([aria-hidden='true']) .solution-copy > *",
+    ".belarus-network__copy > *",
+    ".belarus-network__stats > div",
+    ".belarus-map-card",
+    ".home-about h2",
+    ".home-about-copy",
+    ".home-about-stats > div",
+    ".home-about-media",
+    ".materials-grid .material-card",
+    ".home-contact-form",
+    ".company-hero-media",
+    ".company-hero-copy > *",
+    ".company-metrics > div",
+    ".company-red-inner > *",
+    ".company-quote > *",
+    ".about-hero-media",
+    ".about-hero-copy > *",
+    ".about-stats > div",
+    ".about-red-grid > *",
+    ".about-quote > *",
+    ".cardiology-page-hero > *",
+    ".specialty-hero > img",
+    ".specialty-hero-copy > *",
+    ".tech-media",
+    ".tech-copy > *",
+    ".tech-specs > div",
+    ".cardiology-feature-media",
+    ".cardiology-feature-copy > *",
+    ".cardiology-specs > div",
+    ".detail-hero",
+    ".detail-intro > *",
+    ".detail-block",
+    ".map-copy > *",
+    ".map-frame",
+    ".contact-panel",
+    ".contact-details > div",
+    ".contacts-content > h1",
+    ".contacts-info-list > div",
+    ".contacts-question",
+    ".contacts-map",
+    ".footer-main > *",
+    ".footer-bottom > *",
+  ];
 
-    if (navToggle && siteNav) {
-      navToggle.setAttribute("aria-expanded", "false");
-      navToggle.setAttribute("aria-label", "Открыть меню");
-      siteNav.classList.remove("is-open");
-      document.body.classList.remove("is-nav-open");
-    }
+  selectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((element) => {
+      if (targetSet.has(element) || element.closest(".hero")) {
+        return;
+      }
+
+      targetSet.add(element);
+      targets.push(element);
+    });
   });
-});
+
+  if (targets.length === 0) {
+    return;
+  }
+
+  targets.forEach((element, index) => {
+    element.classList.add("soft-reveal");
+    element.style.setProperty("--soft-reveal-delay", `${Math.min((index % 6) * 55, 275)}ms`);
+  });
+
+  if (introMotionPreference.matches || !("IntersectionObserver" in window)) {
+    targets.forEach((element) => element.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      rootMargin: "0px 0px -8% 0px",
+      threshold: 0.08,
+    },
+  );
+
+  targets.forEach((element) => observer.observe(element));
+};
+
+setupSoftReveals();
 
 const carousel = document.querySelector("[data-carousel]");
 
@@ -725,9 +726,7 @@ if (heroWaterCanvas) {
   let lastX = 0;
   let lastY = 0;
   let ready = false;
-  let introRipplesPlayed = false;
   let rippleIntroRipplesPlayed = false;
-  let mosaicIntroRipplesPlayed = false;
 
   const vertexShaderSource = `
     attribute vec2 a_position;
@@ -1018,22 +1017,6 @@ if (heroWaterCanvas) {
       });
     };
 
-    const playIntroRipples = () => {
-      if (!document.body.classList.contains("home-intro") || introRipplesPlayed || reducedMotion.matches || !ready) {
-        return;
-      }
-
-      introRipplesPlayed = true;
-      scheduleIntroRipples([
-        { x: 0.1, y: 0.78, strength: 0.95, delay: 220 },
-        { x: 0.28, y: 0.68, strength: 1, delay: 360 },
-        { x: 0.5, y: 0.58, strength: 0.98, delay: 500 },
-        { x: 0.72, y: 0.48, strength: 0.9, delay: 650 },
-        { x: 0.9, y: 0.38, strength: 0.82, delay: 820 },
-        { x: 0.38, y: 0.34, strength: 0.72, delay: 980 },
-      ], "home-intro");
-    };
-
     const playRippleIntroRipples = () => {
       if (
         !document.body.classList.contains("home-ripple-intro") ||
@@ -1054,26 +1037,6 @@ if (heroWaterCanvas) {
       ], "home-ripple-intro");
     };
 
-    const playMosaicIntroRipples = () => {
-      if (
-        !document.body.classList.contains("home-mosaic-intro") ||
-        mosaicIntroRipplesPlayed ||
-        reducedMotion.matches ||
-        !ready
-      ) {
-        return;
-      }
-
-      mosaicIntroRipplesPlayed = true;
-      scheduleIntroRipples([
-        { x: 0.18, y: 0.32, strength: 0.86, delay: 160 },
-        { x: 0.48, y: 0.52, strength: 1, delay: 270 },
-        { x: 0.76, y: 0.42, strength: 0.92, delay: 390 },
-        { x: 0.34, y: 0.72, strength: 0.78, delay: 560 },
-        { x: 0.66, y: 0.78, strength: 0.72, delay: 720 },
-      ], "home-mosaic-intro");
-    };
-
     const bootWater = () => {
       if (reducedMotion.matches) {
         return;
@@ -1084,24 +1047,12 @@ if (heroWaterCanvas) {
       ready = true;
       hero.classList.add("is-water-ready");
       drawWater();
-      playIntroRipples();
       playRippleIntroRipples();
-      playMosaicIntroRipples();
     };
-
-    window.addEventListener("home-intro:start", () => {
-      introRipplesPlayed = false;
-      playIntroRipples();
-    });
 
     window.addEventListener("home-ripple-intro:start", () => {
       rippleIntroRipplesPlayed = false;
       playRippleIntroRipples();
-    });
-
-    window.addEventListener("home-mosaic-intro:start", () => {
-      mosaicIntroRipplesPlayed = false;
-      playMosaicIntroRipples();
     });
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
