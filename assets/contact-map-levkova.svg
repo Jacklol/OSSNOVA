@@ -40,13 +40,6 @@
     <path d="M796 92C830 168 851 229 866 305C882 386 884 482 875 706" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
   </g>
 
-  <g stroke="#bec4c9" stroke-width="2" opacity="0.82">
-    <path d="M332 304C346 291 370 292 383 306C396 320 394 344 380 357C365 370 342 369 329 355C316 340 318 317 332 304Z" fill="#fbfcfd"/>
-    <path d="M620 303C637 288 664 290 679 307C694 324 692 351 675 366C658 381 631 379 616 362C601 345 603 318 620 303Z" fill="#fbfcfd"/>
-    <path d="M852 174C868 160 893 161 908 177C922 193 921 218 905 232C889 247 864 245 850 229C835 213 837 188 852 174Z" fill="#fbfcfd"/>
-    <path d="M945 385C963 369 991 371 1007 389C1023 407 1021 435 1003 451C985 467 957 465 941 447C925 429 927 401 945 385Z" fill="#fbfcfd"/>
-  </g>
-
   <g fill="#ffffff" stroke="#b8bec4" stroke-width="2.2" filter="url(#soft-shadow)" opacity="0.92">
     <path d="M495 210L576 188L594 254L513 278L495 210Z"/>
     <path d="M420 330L516 306L533 376L436 401L420 330Z"/>
@@ -69,12 +62,6 @@
     <text x="275" y="300" transform="rotate(-11 275 300)">Новоуфимская ул.</text>
     <text x="964" y="379" transform="rotate(87 964 379)">Сенницкая ул.</text>
     <text x="398" y="573" transform="rotate(-19 398 573)">Вузовский пер.</text>
-  </g>
-
-  <g transform="translate(672 384)">
-    <circle r="32" fill="#b90e2f" opacity="0.12"/>
-    <circle r="16" fill="#b90e2f" opacity="0.22"/>
-    <circle r="5" fill="#b90e2f"/>
   </g>
 
   <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
