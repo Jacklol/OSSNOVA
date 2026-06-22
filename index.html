@@ -14,13 +14,21 @@
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=ossnova-favicon-1" />
     <meta name="theme-color" content="#b90e2f" />
     <link rel="preload" as="image" href="assets/hero.png" fetchpriority="high" />
+    <style>
+      html.is-i18n-pending body,
+      html.is-home-motion-pending body {
+        opacity: 0 !important;
+        pointer-events: none;
+        visibility: hidden;
+      }
+    </style>
     <script>
       (() => {
         if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
           document.documentElement.classList.add("is-home-motion-pending");
           window.setTimeout(() => {
             document.documentElement.classList.remove("is-home-motion-pending");
-          }, 2600);
+          }, 4200);
         }
 
         const supportedLanguages = ["ru", "en"];
