@@ -131,6 +131,7 @@ setLanguage(getInitialLanguage(), { persist: Boolean(new URLSearchParams(window.
 
 const introMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
 const homeRippleReveal = document.querySelector(".hero-ripple-reveal");
+const homeMotionPendingClass = "is-home-motion-pending";
 let introCleanupTimer = 0;
 
 const stopHomeIntro = () => {
@@ -151,7 +152,71 @@ const startHomeIntro = () => {
   introCleanupTimer = window.setTimeout(stopHomeIntro, 2600);
 };
 
-window.addEventListener("load", startHomeIntro, { once: true });
+const waitForImageReady = (image, timeout = 1200) =>
+  new Promise((resolve) => {
+    if (!image || (image.complete && image.naturalWidth > 0)) {
+      resolve();
+      return;
+    }
+
+    let isResolved = false;
+    const finish = () => {
+      if (isResolved) {
+        return;
+      }
+
+      isResolved = true;
+      window.clearTimeout(timer);
+      image.removeEventListener("load", finish);
+      image.removeEventListener("error", finish);
+      resolve();
+    };
+    const timer = window.setTimeout(finish, timeout);
+
+    image.addEventListener("load", finish, { once: true });
+    image.addEventListener("error", finish, { once: true });
+  });
+
+const waitForWindowReady = (timeout = 1600) =>
+  new Promise((resolve) => {
+    if (document.readyState === "complete") {
+      resolve();
+      return;
+    }
+
+    let isResolved = false;
+    const finish = () => {
+      if (isResolved) {
+        return;
+      }
+
+      isResolved = true;
+      window.clearTimeout(timer);
+      window.removeEventListener("load", finish);
+      resolve();
+    };
+    const timer = window.setTimeout(finish, timeout);
+
+    window.addEventListener("load", finish, { once: true });
+  });
+
+const setupProgressiveImages = () => {
+  document.querySelectorAll("img[data-lqip]").forEach((image) => {
+    image.style.setProperty("--lqip-image", `url("${image.dataset.lqip}")`);
+
+    const markLoaded = () => image.classList.add("is-loaded");
+
+    if (image.complete && image.naturalWidth > 0) {
+      markLoaded();
+      return;
+    }
+
+    image.addEventListener("load", markLoaded, { once: true });
+    image.addEventListener("error", markLoaded, { once: true });
+  });
+};
+
+setupProgressiveImages();
 
 const navToggle = document.querySelector(".nav-toggle");
 const siteNav = document.querySelector(".site-nav");
@@ -248,7 +313,7 @@ const setupSoftReveals = () => {
   });
 
   if (targets.length === 0) {
-    return;
+    return () => {};
   }
 
   targets.forEach((element, index) => {
@@ -256,32 +321,58 @@ const setupSoftReveals = () => {
     element.style.setProperty("--soft-reveal-delay", `${Math.min((index % 6) * 55, 275)}ms`);
   });
 
+  const revealVisibleTargets = () => {
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+
+    targets.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+
+      if (rect.top < viewportHeight * 0.92 && rect.bottom > 0) {
+        element.classList.add("is-visible");
+      }
+    });
+  };
+
   if (introMotionPreference.matches || !("IntersectionObserver" in window)) {
-    targets.forEach((element) => element.classList.add("is-visible"));
-    return;
+    return () => {
+      revealVisibleTargets();
+      targets.forEach((element) => element.classList.add("is-visible"));
+    };
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
+  let isStarted = false;
 
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    },
-    {
-      rootMargin: "0px 0px -8% 0px",
-      threshold: 0.08,
-    },
-  );
+  return () => {
+    if (isStarted) {
+      return;
+    }
 
-  targets.forEach((element) => observer.observe(element));
+    isStarted = true;
+    revealVisibleTargets();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        rootMargin: "0px 0px -8% 0px",
+        threshold: 0.08,
+      },
+    );
+
+    targets.forEach((element) => observer.observe(element));
+  };
 };
 
-setupSoftReveals();
+const startSoftReveals = setupSoftReveals();
+const softRevealFallbackTimer = window.setTimeout(startSoftReveals, 1800);
 
 const carousel = document.querySelector("[data-carousel]");
 
@@ -1308,6 +1399,38 @@ if (heroWaterCanvas) {
     }
   }
 }
+
+const startInitialMotion = async () => {
+  const initialImage =
+    document.querySelector(".hero-bg") ||
+    document.querySelector("img[fetchpriority='high']") ||
+    document.querySelector("img[data-lqip]");
+
+  let hasStarted = false;
+  const startMotion = () => {
+    if (hasStarted) {
+      return;
+    }
+
+    hasStarted = true;
+    document.documentElement.classList.remove(homeMotionPendingClass);
+    window.clearTimeout(softRevealFallbackTimer);
+    startHomeIntro();
+    startSoftReveals();
+  };
+
+  const fallbackTimer = window.setTimeout(startMotion, 1800);
+
+  await Promise.all([
+    waitForImageReady(initialImage, 1200),
+    waitForWindowReady(1600),
+  ]).catch(() => {});
+
+  window.clearTimeout(fallbackTimer);
+  startMotion();
+};
+
+startInitialMotion();
 
 const contactModal = document.querySelector(".contact-modal");
 const contactModalOpenButtons = document.querySelectorAll("[data-contact-modal-open]");

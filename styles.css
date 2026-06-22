@@ -26,6 +26,11 @@ html.is-i18n-pending body {
   opacity: 0;
 }
 
+html.is-home-motion-pending body {
+  opacity: 0;
+  pointer-events: none;
+}
+
 body {
   margin: 0;
   background: var(--white);
@@ -45,6 +50,16 @@ body.is-modal-open {
 img {
   display: block;
   max-width: 100%;
+}
+
+img[data-lqip] {
+  background: var(--lqip-image) center / cover no-repeat;
+  filter: blur(10px);
+  transition: filter 420ms ease;
+}
+
+img[data-lqip].is-loaded {
+  filter: none;
 }
 
 a {
