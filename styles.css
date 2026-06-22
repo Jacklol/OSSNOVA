@@ -3255,9 +3255,12 @@ summary {
     max-width: 100%;
     padding: 16px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    overflow-wrap: anywhere;
+    font-size: clamp(20px, 6.5vw, 28px);
+    line-height: 1.18;
+    overflow-wrap: normal;
     transform: none;
-    white-space: normal;
+    white-space: nowrap;
+    word-break: normal;
   }
 
   .site-nav a:hover,
