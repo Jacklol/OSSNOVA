@@ -676,7 +676,7 @@ if (belarusGlobeCanvas) {
     const projection = d3Api.geoOrthographic().clipAngle(90).precision(0.7);
     const path = d3Api.geoPath(projection, context);
     const baseRotation = [8, -50, 0];
-    const orbitDuration = 320000;
+    const orbitDuration = 180000;
     const frameDelay = 1000 / 20;
     let animationFrame = 0;
     let canvasWidth = 1;
@@ -724,16 +724,16 @@ if (belarusGlobeCanvas) {
 
       context.beginPath();
       path(graticule);
-      context.lineWidth = 1;
-      context.strokeStyle = "rgba(102, 112, 133, 0.085)";
+      context.lineWidth = 1.05;
+      context.strokeStyle = "rgba(102, 112, 133, 0.13)";
       context.stroke();
 
       context.beginPath();
       path(countries);
-      context.fillStyle = "rgba(184, 194, 207, 0.34)";
+      context.fillStyle = "rgba(184, 194, 207, 0.38)";
       context.fill();
-      context.lineWidth = 1.05;
-      context.strokeStyle = "rgba(116, 126, 143, 0.22)";
+      context.lineWidth = 1.35;
+      context.strokeStyle = "rgba(78, 88, 108, 0.36)";
       context.stroke();
 
       if (belarusFeature && belarusCenter) {

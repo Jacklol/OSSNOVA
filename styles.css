@@ -946,11 +946,21 @@ summary {
 }
 
 .belarus-network__globe {
-  display: none;
+  position: absolute;
+  top: 48%;
+  left: 68%;
+  z-index: -1;
+  display: block;
+  width: min(820px, 68vw);
+  height: min(820px, 68vw);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 420ms ease;
 }
 
 .belarus-network.is-globe-ready .belarus-network__globe {
-  opacity: 0;
+  opacity: 0.5;
 }
 
 .belarus-network__shell {
