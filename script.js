@@ -280,6 +280,8 @@ const setupSoftReveals = () => {
     ".cardiology-page-hero > *",
     ".specialty-hero > img",
     ".specialty-hero-copy > *",
+    ".technologies > .section-shell > .section-title",
+    ".technologies > .section-shell > .section-lead",
     ".tech-media",
     ".tech-copy > *",
     ".tech-specs > div",
@@ -372,7 +374,13 @@ const setupSoftReveals = () => {
 };
 
 const startSoftReveals = setupSoftReveals();
-const softRevealFallbackTimer = window.setTimeout(startSoftReveals, 1800);
+let softRevealFallbackTimer = 0;
+
+if (homeRippleReveal) {
+  softRevealFallbackTimer = window.setTimeout(startSoftReveals, 1800);
+} else {
+  startSoftReveals();
+}
 
 const carousel = document.querySelector("[data-carousel]");
 
@@ -1401,6 +1409,11 @@ if (heroWaterCanvas) {
 }
 
 const startInitialMotion = async () => {
+  if (!homeRippleReveal) {
+    document.documentElement.classList.remove(homeMotionPendingClass);
+    return;
+  }
+
   const initialImage =
     document.querySelector(".hero-bg") ||
     document.querySelector("img[fetchpriority='high']") ||
