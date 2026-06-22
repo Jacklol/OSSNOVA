@@ -1,4 +1,6 @@
 const i18nStorageKey = "ossnova-language";
+const i18nDictionaryVersion = "nav-speed-1";
+const i18nDictionaryCachePrefix = "ossnova-i18n";
 const i18nPendingClass = "is-i18n-pending";
 const i18nSupportedLanguages = ["ru", "en"];
 let currentLanguage = "ru";
@@ -37,14 +39,42 @@ const getI18nText = (key, fallback = "") => {
   return currentDictionary[key] ?? fallback;
 };
 
+const getCachedI18nDictionary = (language) => {
+  try {
+    const cachedDictionary = window.sessionStorage.getItem(`${i18nDictionaryCachePrefix}:${i18nDictionaryVersion}:${language}`);
+    return cachedDictionary ? JSON.parse(cachedDictionary) : null;
+  } catch (error) {
+    return null;
+  }
+};
+
+const cacheI18nDictionary = (language, dictionary) => {
+  try {
+    window.sessionStorage.setItem(
+      `${i18nDictionaryCachePrefix}:${i18nDictionaryVersion}:${language}`,
+      JSON.stringify(dictionary)
+    );
+  } catch (error) {
+    // The dictionary can still be fetched normally when storage is unavailable.
+  }
+};
+
 const loadI18nDictionary = async (language) => {
-  const response = await fetch(`locales/${language}.json`, { cache: "no-cache" });
+  const cachedDictionary = getCachedI18nDictionary(language);
+
+  if (cachedDictionary) {
+    return cachedDictionary;
+  }
+
+  const response = await fetch(`locales/${language}.json`, { cache: "force-cache" });
 
   if (!response.ok) {
     throw new Error(`Could not load ${language} dictionary`);
   }
 
-  return response.json();
+  const dictionary = await response.json();
+  cacheI18nDictionary(language, dictionary);
+  return dictionary;
 };
 
 const updateLanguageUrl = (language) => {
@@ -266,6 +296,59 @@ if (navToggle && siteNav) {
     setNavToggleLabel(navToggle.getAttribute("aria-expanded") === "true");
   });
 }
+
+const prefetchedNavPages = new Set();
+
+const prefetchNavPage = (href) => {
+  if (!href || href.startsWith("#")) {
+    return;
+  }
+
+  const url = new URL(href, window.location.href);
+
+  if (url.origin !== window.location.origin || prefetchedNavPages.has(url.href)) {
+    return;
+  }
+
+  prefetchedNavPages.add(url.href);
+
+  const link = document.createElement("link");
+  link.rel = "prefetch";
+  link.as = "document";
+  link.href = url.href;
+  document.head.append(link);
+};
+
+const setupNavPagePrefetch = () => {
+  const navLinks = Array.from(document.querySelectorAll(".site-nav a[href]")).filter((link) => {
+    const href = link.getAttribute("href") || "";
+    return href && href !== "#" && !link.hasAttribute("data-language-toggle");
+  });
+
+  if (navLinks.length === 0) {
+    return;
+  }
+
+  const prefetchAll = () => {
+    navLinks.forEach((link) => prefetchNavPage(link.getAttribute("href")));
+  };
+
+  navLinks.forEach((link) => {
+    const prefetchCurrentLink = () => prefetchNavPage(link.getAttribute("href"));
+
+    link.addEventListener("pointerenter", prefetchCurrentLink, { passive: true });
+    link.addEventListener("focus", prefetchCurrentLink);
+    link.addEventListener("touchstart", prefetchCurrentLink, { passive: true });
+  });
+
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(prefetchAll, { timeout: 1800 });
+  } else {
+    window.setTimeout(prefetchAll, 900);
+  }
+};
+
+setupNavPagePrefetch();
 
 const setupSoftReveals = () => {
   const targets = [];
