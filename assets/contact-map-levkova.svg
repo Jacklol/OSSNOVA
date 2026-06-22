@@ -1,72 +1,72 @@
 <svg width="1344" height="768" viewBox="0 0 1344 768" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <pattern id="small-grid" width="16" height="16" patternUnits="userSpaceOnUse">
-      <path d="M16 0H0V16" stroke="#edf0f2" stroke-width="1"/>
+      <path d="M16 0H0V16" stroke="#e7ecef" stroke-width="1"/>
     </pattern>
     <pattern id="large-grid" width="80" height="80" patternUnits="userSpaceOnUse">
       <rect width="80" height="80" fill="url(#small-grid)"/>
-      <path d="M80 0H0V80" stroke="#e1e5e8" stroke-width="1.2"/>
+      <path d="M80 0H0V80" stroke="#d9e0e5" stroke-width="1.15"/>
     </pattern>
-    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#23455a" flood-opacity="0.08"/>
+    <linearGradient id="building-fill" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f2f5f7"/>
+    </linearGradient>
+    <filter id="building-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="#23455a" flood-opacity="0.085"/>
     </filter>
   </defs>
 
-  <rect width="1344" height="768" fill="#fbfcfd"/>
-  <rect width="1344" height="768" fill="url(#large-grid)" opacity="0.8"/>
+  <rect width="1344" height="768" fill="#fafbfc"/>
+  <rect width="1344" height="768" fill="url(#large-grid)" opacity="0.74"/>
 
-  <g opacity="0.72">
-    <path d="M-34 613C128 559 247 524 382 470C510 419 620 376 745 344C867 313 1015 269 1381 116" stroke="#d3d7db" stroke-width="22" stroke-linecap="round"/>
-    <path d="M-34 613C128 559 247 524 382 470C510 419 620 376 745 344C867 313 1015 269 1381 116" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
-    <path d="M-34 613C128 559 247 524 382 470C510 419 620 376 745 344C867 313 1015 269 1381 116" stroke="#c6ccd1" stroke-width="2"/>
+  <g opacity="0.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M264 41L295 52L364 75L469 106L567 133L701 170L967 245L1018 259" stroke="#cfd7dc" stroke-width="21"/>
+    <path d="M264 41L295 52L364 75L469 106L567 133L701 170L967 245L1018 259" stroke="#ffffff" stroke-width="12"/>
+    <path d="M264 41L295 52L364 75L469 106L567 133L701 170L967 245L1018 259" stroke="#adb8c0" stroke-width="1.8"/>
 
-    <path d="M210 -42C254 84 293 193 344 328C395 461 415 564 388 812" stroke="#d3d7db" stroke-width="18" stroke-linecap="round"/>
-    <path d="M210 -42C254 84 293 193 344 328C395 461 415 564 388 812" stroke="#ffffff" stroke-width="11" stroke-linecap="round"/>
-    <path d="M210 -42C254 84 293 193 344 328C395 461 415 564 388 812" stroke="#c6ccd1" stroke-width="2"/>
+    <path d="M1030 69L1032 86L1029 95L1027 133L1020 237L1018 259L1018 275L1006 364L1003 397L1002 431L1001 439L997 507L996 528L995 537L993 555L977 687L974 710L961 823" stroke="#cbd3d8" stroke-width="25"/>
+    <path d="M1030 69L1032 86L1029 95L1027 133L1020 237L1018 259L1018 275L1006 364L1003 397L1002 431L1001 439L997 507L996 528L995 537L993 555L977 687L974 710L961 823" stroke="#ffffff" stroke-width="15"/>
+    <path d="M1030 69L1032 86L1029 95L1027 133L1020 237L1018 259L1018 275L1006 364L1003 397L1002 431L1001 439L997 507L996 528L995 537L993 555L977 687L974 710L961 823" stroke="#aab5bd" stroke-width="2"/>
 
-    <path d="M735 -30C684 84 646 191 630 301C616 398 637 515 697 800" stroke="#d3d7db" stroke-width="20" stroke-linecap="round"/>
-    <path d="M735 -30C684 84 646 191 630 301C616 398 637 515 697 800" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
-    <path d="M735 -30C684 84 646 191 630 301C616 398 637 515 697 800" stroke="#c6ccd1" stroke-width="2"/>
+    <path d="M78 500L133 502L254 506L270 506L328 508L427 511L536 514L613 516L636 517L779 521L814 522L960 527L1002 530" stroke="#d2d9de" stroke-width="19"/>
+    <path d="M78 500L133 502L254 506L270 506L328 508L427 511L536 514L613 516L636 517L779 521L814 522L960 527L1002 530" stroke="#ffffff" stroke-width="10"/>
+    <path d="M78 500L133 502L254 506L270 506L328 508L427 511L536 514L613 516L636 517L779 521L814 522L960 527L1002 530" stroke="#b2bdc4" stroke-width="1.6"/>
 
-    <path d="M935 -42C941 108 946 246 952 385C957 520 972 647 994 820" stroke="#d3d7db" stroke-width="20" stroke-linecap="round"/>
-    <path d="M935 -42C941 108 946 246 952 385C957 520 972 647 994 820" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
-    <path d="M935 -42C941 108 946 246 952 385C957 520 972 647 994 820" stroke="#c6ccd1" stroke-width="2"/>
-
-    <path d="M167 333C297 313 414 296 533 265C657 233 745 208 865 182C1016 148 1169 112 1382 35" stroke="#d3d7db" stroke-width="16" stroke-linecap="round"/>
-    <path d="M167 333C297 313 414 296 533 265C657 233 745 208 865 182C1016 148 1169 112 1382 35" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
-    <path d="M167 333C297 313 414 296 533 265C657 233 745 208 865 182C1016 148 1169 112 1382 35" stroke="#c6ccd1" stroke-width="1.6"/>
-
-    <path d="M796 92C830 168 851 229 866 305C882 386 884 482 875 706" stroke="#d9dde0" stroke-width="13" stroke-linecap="round"/>
-    <path d="M796 92C830 168 851 229 866 305C882 386 884 482 875 706" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1393 8L1297 22L1192 29L1065 62L1030 69" stroke="#d3dade" stroke-width="17"/>
+    <path d="M1393 8L1297 22L1192 29L1065 62L1030 69" stroke="#ffffff" stroke-width="9"/>
+    <path d="M1393 8L1297 22L1192 29L1065 62L1030 69" stroke="#b4bec5" stroke-width="1.5"/>
   </g>
 
-  <g fill="#ffffff" stroke="#b8bec4" stroke-width="2.2" filter="url(#soft-shadow)" opacity="0.92">
-    <path d="M495 210L576 188L594 254L513 278L495 210Z"/>
-    <path d="M420 330L516 306L533 376L436 401L420 330Z"/>
-    <path d="M552 410L669 379L688 451L571 481L552 410Z"/>
-    <path d="M699 285L786 263L804 334L716 356L699 285Z"/>
-    <path d="M743 421L835 397L853 467L760 491L743 421Z"/>
-    <path d="M928 272L1002 254L1018 317L943 336L928 272Z"/>
-    <path d="M1018 462L1118 436L1137 510L1036 536L1018 462Z"/>
-    <path d="M195 377L287 354L303 416L211 439L195 377Z"/>
-    <path d="M260 482L338 462L353 519L275 540L260 482Z"/>
-    <path d="M112 510L186 492L200 548L126 567L112 510Z"/>
-    <path d="M684 348L726 337L738 384L696 395L684 348Z"/>
-    <path d="M608 511L719 483L737 552L625 580L608 511Z"/>
-    <path d="M815 545L919 518L937 589L832 616L815 545Z"/>
+  <g fill="url(#building-fill)" stroke="#98a8b2" stroke-width="2.3" filter="url(#building-shadow)" opacity="0.98">
+    <path d="M695 367L694 401L649 401L650 367L695 367Z"/>
+    <path d="M692 427L690 461L645 460L647 427L692 427Z"/>
+    <path d="M811 391L807 433L759 432L763 391L811 391Z"/>
+    <path d="M840 357L787 357L786 360L775 359L775 365L767 365L744 365L746 341L790 341L789 344L841 345L840 357Z"/>
+    <path d="M893 437L889 369L954 369L949 440L893 437Z"/>
+    <path d="M949 440L950 494L906 494L833 491L836 463L890 464L893 437L949 440Z"/>
+    <path d="M639 297L702 297L787 298L885 298L959 299L958 324L638 322L639 297Z"/>
+    <path d="M585 284L593 201L594 191L670 193L668 216L653 216L651 230L648 261L646 285L585 284Z"/>
+    <path d="M381 293L507 298L503 334L469 334L471 321L449 320L446 351L469 362L468 375L445 383L445 390L465 396L464 412L445 419L442 448L481 449L484 445L514 448L512 481L481 480L481 476L431 474L384 473L384 478L355 478L381 293Z"/>
+    <path d="M1165 554L1162 576L1157 617L1155 639L1171 640L1245 642L1310 643L1307 669L1095 664L1105 554L1165 554Z"/>
   </g>
 
-  <g opacity="0.54" fill="#8d969d" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600">
-    <text x="774" y="165" transform="rotate(-13 774 165)">ул. Воронянского</text>
-    <text x="580" y="159" transform="rotate(-72 580 159)">ул. Левкова</text>
-    <text x="275" y="300" transform="rotate(-11 275 300)">Новоуфимская ул.</text>
-    <text x="964" y="379" transform="rotate(87 964 379)">Сенницкая ул.</text>
-    <text x="398" y="573" transform="rotate(-19 398 573)">Вузовский пер.</text>
+  <g fill="none" stroke="#d7dfe4" stroke-width="1.1" opacity="0.95">
+    <path d="M695 367L694 401L649 401L650 367L695 367Z"/>
+    <path d="M692 427L690 461L645 460L647 427L692 427Z"/>
+    <path d="M811 391L807 433L759 432L763 391L811 391Z"/>
+    <path d="M893 437L889 369L954 369L949 440L893 437Z"/>
+  </g>
+
+  <g opacity="0.68" fill="#7c8790" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600">
+    <text x="475" y="124" transform="rotate(16 475 124)">Новоуфимская ул.</text>
+    <text x="1044" y="304" transform="rotate(93 1044 304)">ул. Левкова</text>
+    <text x="176" y="494" transform="rotate(2 176 494)">пер. Воронянского</text>
+    <text x="1090" y="50" transform="rotate(-12 1090 50)">Вузовский пер.</text>
   </g>
 
   <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
-    <rect x="432" y="474" width="480" height="58" rx="29" fill="#ffffff" stroke="#e0e4e7"/>
-    <text x="672" y="511" fill="#5f6468" font-size="28" font-weight="700">Минск, ул. Левкова, 24</text>
+    <rect x="452" y="438" width="440" height="56" rx="28" fill="#ffffff" stroke="#d9e0e5"/>
+    <text x="672" y="473" fill="#525b62" font-size="26" font-weight="700">Минск, ул. Левкова, 24</text>
     <text x="1318" y="744" fill="#a4abb1" font-size="13" text-anchor="end">© OpenStreetMap contributors</text>
   </g>
 </svg>
