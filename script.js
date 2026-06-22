@@ -130,8 +130,10 @@ initLanguageToggle();
 setLanguage(getInitialLanguage(), { persist: Boolean(new URLSearchParams(window.location.search).get("lang")) });
 
 const introMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+const homeMobileIntroQuery = window.matchMedia("(max-width: 640px)");
 const homeRippleReveal = document.querySelector(".hero-ripple-reveal");
 const homeMotionPendingClass = "is-home-motion-pending";
+const homeMobileMotionPendingClass = "is-home-mobile-motion-pending";
 let introCleanupTimer = 0;
 
 const stopHomeIntro = () => {
@@ -141,7 +143,7 @@ const stopHomeIntro = () => {
 };
 
 const startHomeIntro = () => {
-  if (!homeRippleReveal || introMotionPreference.matches) {
+  if (!homeRippleReveal || introMotionPreference.matches || homeMobileIntroQuery.matches) {
     return;
   }
 
@@ -150,6 +152,20 @@ const startHomeIntro = () => {
   document.body.classList.add("home-ripple-intro");
   window.dispatchEvent(new CustomEvent("home-ripple-intro:start"));
   introCleanupTimer = window.setTimeout(stopHomeIntro, 2600);
+};
+
+const startHomeMobileIntro = () => {
+  document.documentElement.classList.remove(homeMotionPendingClass);
+
+  if (!homeRippleReveal || introMotionPreference.matches) {
+    document.documentElement.classList.remove(homeMobileMotionPendingClass);
+    return;
+  }
+
+  document.body.classList.remove("home-mobile-intro");
+  void document.body.offsetWidth;
+  document.body.classList.add("home-mobile-intro");
+  document.documentElement.classList.remove(homeMobileMotionPendingClass);
 };
 
 const waitForImageReady = (image, timeout = 1200) =>
@@ -1153,7 +1169,7 @@ if (heroWaterCanvas) {
 
   const program = gl && createProgram();
 
-  if (gl && program && hero && heroImage) {
+  if (gl && program && hero && heroImage && !homeMobileIntroQuery.matches) {
     const positionLocation = gl.getAttribLocation(program, "a_position");
     const uvLocation = gl.getAttribLocation(program, "a_uv");
     const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
@@ -1411,6 +1427,14 @@ if (heroWaterCanvas) {
 const startInitialMotion = async () => {
   if (!homeRippleReveal) {
     document.documentElement.classList.remove(homeMotionPendingClass);
+    document.documentElement.classList.remove(homeMobileMotionPendingClass);
+    return;
+  }
+
+  if (homeMobileIntroQuery.matches) {
+    window.clearTimeout(softRevealFallbackTimer);
+    startHomeMobileIntro();
+    startSoftReveals();
     return;
   }
 

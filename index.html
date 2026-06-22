@@ -21,10 +21,27 @@
         pointer-events: none;
         visibility: hidden;
       }
+
+      @media (max-width: 640px) {
+        html.is-home-mobile-motion-pending .hero h1,
+        html.is-home-mobile-motion-pending .hero p,
+        html.is-home-mobile-motion-pending .hero .button {
+          opacity: 0;
+          transform: translate3d(0, 10px, 0);
+        }
+      }
     </style>
     <script>
       (() => {
-        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const mobileMotionQuery = window.matchMedia("(max-width: 640px)");
+
+        if (!reducedMotionQuery.matches && mobileMotionQuery.matches) {
+          document.documentElement.classList.add("is-home-mobile-motion-pending");
+          window.setTimeout(() => {
+            document.documentElement.classList.remove("is-home-mobile-motion-pending");
+          }, 1600);
+        } else if (!reducedMotionQuery.matches) {
           document.documentElement.classList.add("is-home-motion-pending");
           window.setTimeout(() => {
             document.documentElement.classList.remove("is-home-motion-pending");
@@ -54,7 +71,7 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="styles.css?v=hero-copy-simple-2" />
+    <link rel="stylesheet" href="styles.css?v=mobile-intro-1" />
   </head>
   <body>
     <header class="site-header">
@@ -450,6 +467,6 @@
     <script src="assets/d3.v7.min.js"></script>
     <script src="assets/world-countries.js"></script>
     <script src="assets/belarus-adm1.js"></script>
-    <script src="script.js?v=perf-4"></script>
+    <script src="script.js?v=mobile-intro-1"></script>
   </body>
 </html>

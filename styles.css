@@ -461,6 +461,39 @@ summary {
   animation-delay: 360ms;
 }
 
+@media (max-width: 640px) {
+  .hero-water,
+  .hero-ripple-reveal {
+    display: none;
+  }
+
+  .hero.is-water-ready .hero-bg {
+    opacity: 1;
+  }
+
+  .home-mobile-intro .hero-bg {
+    animation: homeMobileHeroMediaIntro 520ms ease both;
+  }
+
+  .home-mobile-intro .hero h1,
+  .home-mobile-intro .hero p,
+  .home-mobile-intro .hero .button {
+    animation: homeMobileHeroIntro 540ms ease both;
+  }
+
+  .home-mobile-intro .hero h1 {
+    animation-delay: 80ms;
+  }
+
+  .home-mobile-intro .hero p {
+    animation-delay: 160ms;
+  }
+
+  .home-mobile-intro .hero .button {
+    animation-delay: 240ms;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .soft-reveal {
     opacity: 1;
@@ -641,6 +674,30 @@ summary {
   100% {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes homeMobileHeroIntro {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes homeMobileHeroMediaIntro {
+  0% {
+    opacity: 0.9;
+    transform: scaleX(-1) scale(1.015);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scaleX(-1) scale(1);
   }
 }
 
