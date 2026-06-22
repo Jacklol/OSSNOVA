@@ -11,6 +11,31 @@
     />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=ossnova-favicon-1" />
     <meta name="theme-color" content="#b90e2f" />
+    <script>
+      (() => {
+        const supportedLanguages = ["ru", "en"];
+        const storageKey = "ossnova-language";
+        const pageLanguage = document.documentElement.lang || "ru";
+        const params = new URLSearchParams(window.location.search);
+        let storedLanguage = null;
+
+        try {
+          storedLanguage = window.localStorage.getItem(storageKey);
+        } catch (error) {
+          storedLanguage = null;
+        }
+
+        const language = params.get("lang") || storedLanguage || pageLanguage;
+
+        if (supportedLanguages.includes(language)) {
+          document.documentElement.lang = language;
+
+          if (language !== pageLanguage) {
+            document.documentElement.classList.add("is-i18n-pending");
+          }
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="styles.css?v=i18n-1" />
   </head>
   <body>

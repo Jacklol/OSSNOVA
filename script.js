@@ -1,11 +1,28 @@
 const i18nStorageKey = "ossnova-language";
+const i18nPendingClass = "is-i18n-pending";
 const i18nSupportedLanguages = ["ru", "en"];
 let currentLanguage = "ru";
 let currentDictionary = {};
 
+const getStoredLanguage = () => {
+  try {
+    return window.localStorage.getItem(i18nStorageKey);
+  } catch (error) {
+    return null;
+  }
+};
+
+const storeLanguage = (language) => {
+  try {
+    window.localStorage.setItem(i18nStorageKey, language);
+  } catch (error) {
+    // Language still works from the URL even when storage is unavailable.
+  }
+};
+
 const getInitialLanguage = () => {
   const languageFromUrl = new URLSearchParams(window.location.search).get("lang");
-  const storedLanguage = window.localStorage.getItem(i18nStorageKey);
+  const storedLanguage = getStoredLanguage();
   const pageLanguage = document.documentElement.lang;
   const candidate = languageFromUrl || storedLanguage || pageLanguage || "ru";
 
@@ -86,15 +103,17 @@ const setLanguage = async (language, { persist = true } = {}) => {
     currentLanguage = nextLanguage;
 
     if (persist) {
-      window.localStorage.setItem(i18nStorageKey, nextLanguage);
+      storeLanguage(nextLanguage);
       updateLanguageUrl(nextLanguage);
     }
 
     applyI18n();
+    document.documentElement.classList.remove(i18nPendingClass);
     window.dispatchEvent(new CustomEvent("ossnova:languagechange", { detail: { language: nextLanguage } }));
   } catch (error) {
     currentLanguage = "ru";
     currentDictionary = {};
+    document.documentElement.classList.remove(i18nPendingClass);
   }
 };
 

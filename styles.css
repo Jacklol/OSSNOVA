@@ -9,8 +9,8 @@
   --line: #e8eaed;
   --soft: #eef0f3;
   --white: #ffffff;
-  --shell: min(1760px, calc(100vw - 160px));
-  --narrow: min(1280px, calc(100vw - 160px));
+  --shell: min(1280px, calc(100% - 160px));
+  --narrow: min(1280px, calc(100% - 160px));
 }
 
 * {
@@ -20,6 +20,10 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+}
+
+html.is-i18n-pending body {
+  opacity: 0;
 }
 
 body {
@@ -96,7 +100,7 @@ summary {
   align-items: center;
   justify-content: space-between;
   height: 80px;
-  padding-inline: 80px;
+  padding-inline: max(80px, calc((100vw - 1280px) / 2));
   background: var(--red);
   color: var(--white);
   overflow: hidden;
@@ -244,32 +248,30 @@ summary {
 
 .nav-toggle span {
   position: absolute;
+  top: 50%;
   left: 50%;
   display: block;
   width: 18px;
   height: 2.5px;
   background: currentColor;
-  transform: translateX(-50%);
   transition:
-    top 180ms ease,
     opacity 180ms ease,
     transform 180ms ease;
 }
 
 .nav-toggle span:nth-child(1) {
-  top: 14px;
+  transform: translate(-50%, calc(-50% - 6px));
 }
 
 .nav-toggle span:nth-child(2) {
-  top: 20px;
+  transform: translate(-50%, -50%);
 }
 
 .nav-toggle span:nth-child(3) {
-  top: 26px;
+  transform: translate(-50%, calc(-50% + 6px));
 }
 
 .nav-toggle[aria-expanded="true"] span:nth-child(1) {
-  top: 50%;
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
@@ -278,7 +280,6 @@ summary {
 }
 
 .nav-toggle[aria-expanded="true"] span:nth-child(3) {
-  top: 50%;
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
@@ -678,7 +679,7 @@ summary {
 
 .partners {
   --partner-gap: 20px;
-  width: min(1790px, calc(100vw - 100px));
+  width: min(1340px, calc(100% - 100px));
   margin: 100px auto 0;
   overflow: hidden;
   contain: paint;
@@ -922,11 +923,7 @@ summary {
   margin-top: 128px;
   padding: 118px 0 128px;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 78% 24%, rgba(200, 16, 46, 0.16), rgba(200, 16, 46, 0) 34%),
-    radial-gradient(circle at 12% 88%, rgba(185, 14, 47, 0.18), rgba(185, 14, 47, 0) 30%),
-    radial-gradient(circle at 52% 48%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0) 42%),
-    linear-gradient(135deg, #f7f8fa 0%, #e7ebf0 45%, #ffffff 100%);
+  background: linear-gradient(135deg, #f7f8fa 0%, #e7ebf0 48%, #ffffff 100%);
   color: var(--ink);
   isolation: isolate;
 }
@@ -935,24 +932,13 @@ summary {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background:
-    linear-gradient(118deg, rgba(255, 255, 255, 0) 16%, rgba(255, 255, 255, 0.82) 42%, rgba(255, 255, 255, 0) 68%),
-    radial-gradient(ellipse at 76% 44%, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0) 54%);
+  background: linear-gradient(118deg, rgba(255, 255, 255, 0) 16%, rgba(255, 255, 255, 0.82) 42%, rgba(255, 255, 255, 0) 68%);
   content: "";
   opacity: 0.88;
 }
 
 .belarus-network::after {
-  position: absolute;
-  top: 48%;
-  left: 68%;
-  z-index: -1;
-  width: min(820px, 68vw);
-  aspect-ratio: 1;
-  background: url("assets/globe-belarus-bg.svg") center / contain no-repeat;
-  content: "";
-  opacity: 0.58;
-  transform: translate(-50%, -50%) rotate(-9deg);
+  display: none;
 }
 
 .belarus-network.is-globe-ready::after {
@@ -960,21 +946,11 @@ summary {
 }
 
 .belarus-network__globe {
-  position: absolute;
-  top: 48%;
-  left: 68%;
-  z-index: -1;
-  display: block;
-  width: min(820px, 68vw);
-  height: min(820px, 68vw);
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: opacity 420ms ease;
+  display: none;
 }
 
 .belarus-network.is-globe-ready .belarus-network__globe {
-  opacity: 0.68;
+  opacity: 0;
 }
 
 .belarus-network__shell {
@@ -1110,12 +1086,7 @@ summary {
 }
 
 .belarus-map__outline {
-  fill: rgba(255, 255, 255, 0.28);
-  stroke: rgba(185, 14, 47, 0.2);
-  stroke-dasharray: 8 12;
-  stroke-width: 1.6;
-  vector-effect: non-scaling-stroke;
-  animation: mapOutlinePulse 4.8s ease-in-out infinite;
+  display: none;
 }
 
 .belarus-region {
@@ -1630,7 +1601,7 @@ summary {
   align-items: center;
   flex-direction: column;
   gap: 32px;
-  width: min(1200px, calc(100vw - 160px));
+  width: min(1200px, calc(100% - 160px));
   margin: 0 auto;
   padding: 120px 0;
   text-align: center;
@@ -2131,7 +2102,7 @@ summary {
 }
 
 .detail-shell {
-  width: min(902px, calc(100vw - 160px));
+  width: min(902px, calc(100% - 160px));
   margin-inline: auto;
   padding: 60px 0 120px;
 }
@@ -3140,8 +3111,8 @@ summary {
 
 @media (max-width: 1100px) {
   :root {
-    --shell: min(900px, calc(100vw - 48px));
-    --narrow: min(900px, calc(100vw - 48px));
+    --shell: min(900px, calc(100% - 48px));
+    --narrow: min(900px, calc(100% - 48px));
   }
 
   .site-header {
@@ -3184,8 +3155,20 @@ summary {
   }
 
   .site-nav a {
+    display: block;
+    width: 100%;
+    max-width: 100%;
     padding: 16px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    overflow-wrap: anywhere;
+    transform: none;
+    white-space: normal;
+  }
+
+  .site-nav a:hover,
+  .site-nav a:focus-visible,
+  .site-nav a[aria-current="page"] {
+    transform: none;
   }
 
   .site-nav.is-open {
@@ -3206,7 +3189,7 @@ summary {
   }
 
   .partners {
-    width: calc(100vw - 48px);
+    width: calc(100% - 48px);
     margin-top: 64px;
   }
 
@@ -3331,7 +3314,7 @@ summary {
 
   .company-red-inner,
   .company-quote {
-    width: calc(100vw - 48px);
+    width: calc(100% - 48px);
   }
 
   .about-hero {
@@ -3385,7 +3368,7 @@ summary {
   }
 
   .about-quote {
-    width: calc(100vw - 48px);
+    width: calc(100% - 48px);
     padding: 72px 0 88px;
   }
 
@@ -3483,7 +3466,7 @@ summary {
   }
 
   .detail-shell {
-    width: calc(100vw - 48px);
+    width: calc(100% - 48px);
   }
 
   .materials-grid {
@@ -3524,7 +3507,15 @@ summary {
   }
 
   .footer-main {
+    align-items: stretch;
     padding: 56px 24px;
+  }
+
+  .footer-brand,
+  .footer-links,
+  .footer-links div {
+    width: 100%;
+    min-width: 0;
   }
 
   .footer-links {
@@ -3540,8 +3531,8 @@ summary {
 
 @media (max-width: 640px) {
   :root {
-    --shell: calc(100vw - 32px);
-    --narrow: calc(100vw - 32px);
+    --shell: calc(100% - 32px);
+    --narrow: calc(100% - 32px);
   }
 
   .site-header {
@@ -3649,7 +3640,7 @@ summary {
   }
 
   .partners {
-    width: calc(100vw - 32px);
+    width: calc(100% - 32px);
     margin-top: 44px;
     --partner-gap: 12px;
   }
@@ -3955,7 +3946,7 @@ summary {
 
   .about-quote {
     gap: 26px;
-    width: calc(100vw - 32px);
+    width: calc(100% - 32px);
     padding: 64px 0 72px;
   }
 
@@ -4084,7 +4075,7 @@ summary {
   }
 
   .detail-shell {
-    width: calc(100vw - 32px);
+    width: calc(100% - 32px);
     padding: 40px 0 64px;
   }
 
@@ -4247,8 +4238,8 @@ summary {
 
 @media (max-width: 360px) {
   :root {
-    --shell: calc(100vw - 28px);
-    --narrow: calc(100vw - 28px);
+    --shell: calc(100% - 28px);
+    --narrow: calc(100% - 28px);
   }
 
   .site-header {
@@ -4311,7 +4302,7 @@ summary {
   }
 
   .partners {
-    width: calc(100vw - 28px);
+    width: calc(100% - 28px);
   }
 
   .partner-chip {
