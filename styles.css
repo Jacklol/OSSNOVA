@@ -20,6 +20,12 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(200, 16, 46, 0.18);
+  color: inherit;
 }
 
 html.is-i18n-pending body {
@@ -50,6 +56,8 @@ body.is-modal-open {
 img {
   display: block;
   max-width: 100%;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 img[data-lqip] {
@@ -65,12 +73,31 @@ img[data-lqip].is-loaded {
 a {
   color: inherit;
   text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 button,
 input,
 textarea {
   font: inherit;
+}
+
+button,
+[role="button"],
+.nav-toggle,
+.carousel-btn,
+.carousel-dot,
+.button,
+.text-link,
+.solution-card,
+.material-card,
+.partner-chip,
+.hero-ripple-reveal,
+.hero-water,
+.hero-bg {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 h1,
@@ -419,22 +446,19 @@ summary {
 .home-ripple-intro .hero h1,
 .home-ripple-intro .hero p,
 .home-ripple-intro .hero .button {
-  animation: copyRippleIntro 1050ms cubic-bezier(0.18, 0.82, 0.16, 1) both;
+  animation: homeHeroCopyIntro 620ms ease both;
 }
 
 .home-ripple-intro .hero h1 {
-  animation-delay: 430ms;
-  transform-origin: 12% 42%;
+  animation-delay: 160ms;
 }
 
 .home-ripple-intro .hero p {
-  animation-delay: 620ms;
-  transform-origin: 8% 52%;
+  animation-delay: 260ms;
 }
 
 .home-ripple-intro .hero .button {
-  animation-delay: 820ms;
-  transform-origin: 50% 50%;
+  animation-delay: 360ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -608,26 +632,15 @@ summary {
   }
 }
 
-@keyframes copyRippleIntro {
+@keyframes homeHeroCopyIntro {
   0% {
-    clip-path: circle(0% at 18% 50%);
-    filter: blur(11px);
     opacity: 0;
-    transform: translate3d(0, 16px, 0) scale(0.985);
-  }
-
-  58% {
-    clip-path: circle(92% at 18% 50%);
-    filter: blur(2px);
-    opacity: 1;
-    transform: translate3d(0, 3px, 0) scale(1);
+    transform: translate3d(0, 12px, 0);
   }
 
   100% {
-    clip-path: circle(150% at 50% 50%);
-    filter: blur(0);
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
 }
 
