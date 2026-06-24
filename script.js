@@ -1,5 +1,5 @@
 const i18nStorageKey = "ossnova-language";
-const i18nDictionaryVersion = "nav-speed-1";
+const i18nDictionaryVersion = "formspree-1";
 const i18nDictionaryCachePrefix = "ossnova-i18n";
 const i18nPendingClass = "is-i18n-pending";
 const i18nSupportedLanguages = ["ru", "en"];
@@ -1643,14 +1643,25 @@ document.addEventListener("keydown", (event) => {
 });
 
 const getContactFormSuccessMessage = () =>
-  getI18nText("common.form.status.success", "Запрос подготовлен. Подключите обработчик формы для отправки данных.");
+  getI18nText("common.form.status.success", "Спасибо, сообщение отправлено.");
 
-// Реальную отправку формы нужно подключить здесь: функция используется всеми контактными формами.
-const submitContactRequest = async (form, formData) => ({
-  message: getContactFormSuccessMessage(),
-  form,
-  formData,
-});
+const submitContactRequest = async (form, formData) => {
+  const response = await fetch(form.action, {
+    method: form.method || "POST",
+    body: formData,
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Contact form request failed");
+  }
+
+  return {
+    message: getContactFormSuccessMessage(),
+  };
+};
 
 document.querySelectorAll("[data-contact-form]").forEach((contactForm) => {
   contactForm.addEventListener("submit", async (event) => {
@@ -1677,7 +1688,7 @@ document.querySelectorAll("[data-contact-form]").forEach((contactForm) => {
       contactForm.reset();
     } catch (error) {
       if (status) {
-        status.textContent = getI18nText("common.form.status.error", "Не удалось подготовить запрос. Попробуйте еще раз.");
+        status.textContent = getI18nText("common.form.status.error", "Не удалось отправить сообщение. Попробуйте еще раз.");
       }
     } finally {
       if (submitButton) {
