@@ -1,5 +1,5 @@
 const i18nStorageKey = "ossnova-language";
-const i18nDictionaryVersion = "formspree-1";
+const i18nDictionaryVersion = "formspree-2";
 const i18nDictionaryCachePrefix = "ossnova-i18n";
 const i18nPendingClass = "is-i18n-pending";
 const i18nSupportedLanguages = ["ru", "en"];
@@ -66,7 +66,7 @@ const loadI18nDictionary = async (language) => {
     return cachedDictionary;
   }
 
-  const response = await fetch(`locales/${language}.json`, { cache: "force-cache" });
+  const response = await fetch(`locales/${language}.json?v=${encodeURIComponent(i18nDictionaryVersion)}`, { cache: "force-cache" });
 
   if (!response.ok) {
     throw new Error(`Could not load ${language} dictionary`);
@@ -1645,7 +1645,30 @@ document.addEventListener("keydown", (event) => {
 const getContactFormSuccessMessage = () =>
   getI18nText("common.form.status.success", "Спасибо, сообщение отправлено.");
 
+const getContactFormErrorMessage = () =>
+  getI18nText("common.form.status.error", "Не удалось отправить сообщение. Попробуйте еще раз.");
+
+const readContactFormError = async (response) => {
+  try {
+    const data = await response.json();
+
+    if (Array.isArray(data?.errors) && data.errors.length > 0) {
+      return data.errors.map((error) => error.message).filter(Boolean).join(" ");
+    }
+
+    return data?.error || data?.message || "";
+  } catch (error) {
+    return "";
+  }
+};
+
 const submitContactRequest = async (form, formData) => {
+  const email = formData.get("email");
+
+  if (email && !formData.has("_replyto")) {
+    formData.set("_replyto", email);
+  }
+
   const response = await fetch(form.action, {
     method: form.method || "POST",
     body: formData,
@@ -1655,7 +1678,7 @@ const submitContactRequest = async (form, formData) => {
   });
 
   if (!response.ok) {
-    throw new Error("Contact form request failed");
+    throw new Error((await readContactFormError(response)) || getContactFormErrorMessage());
   }
 
   return {
@@ -1688,7 +1711,7 @@ document.querySelectorAll("[data-contact-form]").forEach((contactForm) => {
       contactForm.reset();
     } catch (error) {
       if (status) {
-        status.textContent = getI18nText("common.form.status.error", "Не удалось отправить сообщение. Попробуйте еще раз.");
+        status.textContent = error?.message || getContactFormErrorMessage();
       }
     } finally {
       if (submitButton) {
