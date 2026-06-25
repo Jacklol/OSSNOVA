@@ -1,5 +1,5 @@
 const i18nStorageKey = "ossnova-language";
-const i18nDictionaryVersion = "english-copy-1";
+const i18nDictionaryVersion = "map-region-stats-3";
 const i18nDictionaryCachePrefix = "ossnova-i18n";
 const i18nPendingClass = "is-i18n-pending";
 const i18nSupportedLanguages = ["ru", "en"];
@@ -568,10 +568,8 @@ if (belarusMapRoot) {
       text: "Западное направление: логистика, офтальмологические решения и поддержка партнерских клиник.",
       textKey: "home.map.regions.brest.text",
       metrics: [
-        ["34", "home.map.metrics.clinics", "клиники"],
-        ["820+", "home.map.metrics.medicalWorkers", "медработников"],
-        ["11", "home.map.metrics.partnerPoints", "партнерских точек"],
-        ["6", "home.map.metrics.trainingVisits", "обучающих выездов"],
+        ["home.map.values.brest.population", "home.map.metrics.population", "1,30 млн", "население"],
+        ["home.map.values.brest.doctorsPerCapita", "home.map.metrics.doctorsPerCapita", "40", "врачей на 10 000 человек"],
       ],
     },
     Vitebsk: {
@@ -580,10 +578,8 @@ if (belarusMapRoot) {
       text: "Северный регион сети: поставки медицинских технологий и сопровождение специалистов на местах.",
       textKey: "home.map.regions.vitebsk.text",
       metrics: [
-        ["29", "home.map.metrics.clinicsMany", "клиник"],
-        ["690+", "home.map.metrics.medicalWorkers", "медработников"],
-        ["9", "home.map.metrics.partnerPoints", "партнерских точек"],
-        ["5", "home.map.metrics.trainingVisits", "обучающих выездов"],
+        ["home.map.values.vitebsk.population", "home.map.metrics.population", "1,07 млн", "население"],
+        ["home.map.values.vitebsk.doctorsPerCapita", "home.map.metrics.doctorsPerCapita", "37", "врачей на 10 000 человек"],
       ],
     },
     Grodno: {
@@ -592,10 +588,8 @@ if (belarusMapRoot) {
       text: "Региональная работа с клиниками, где важны стабильные поставки и обучение врачебных команд.",
       textKey: "home.map.regions.grodno.text",
       metrics: [
-        ["31", "home.map.metrics.clinic", "клиника"],
-        ["760+", "home.map.metrics.medicalWorkers", "медработников"],
-        ["10", "home.map.metrics.partnerPoints", "партнерских точек"],
-        ["5", "home.map.metrics.trainingVisits", "обучающих выездов"],
+        ["home.map.values.grodno.population", "home.map.metrics.population", "984,9 тыс.", "население"],
+        ["home.map.values.grodno.doctorsPerCapita", "home.map.metrics.doctorsPerCapita", "49", "врачей на 10 000 человек"],
       ],
     },
     Gomel: {
@@ -604,10 +598,8 @@ if (belarusMapRoot) {
       text: "Юго-восточное покрытие: технологические решения для офтальмологии и кардиологических направлений.",
       textKey: "home.map.regions.gomel.text",
       metrics: [
-        ["38", "home.map.metrics.clinicsMany", "клиник"],
-        ["910+", "home.map.metrics.medicalWorkers", "медработников"],
-        ["12", "home.map.metrics.partnerPoints", "партнерских точек"],
-        ["7", "home.map.metrics.trainingVisits", "обучающих выездов"],
+        ["home.map.values.gomel.population", "home.map.metrics.population", "1,33 млн", "население"],
+        ["home.map.values.gomel.doctorsPerCapita", "home.map.metrics.doctorsPerCapita", "39", "врачей на 10 000 человек"],
       ],
     },
     Mogilev: {
@@ -616,10 +608,8 @@ if (belarusMapRoot) {
       text: "Восточная часть партнерской сети: консультации, оборудование и сервисное взаимодействие.",
       textKey: "home.map.regions.mogilev.text",
       metrics: [
-        ["27", "home.map.metrics.clinicsMany", "клиник"],
-        ["640+", "home.map.metrics.medicalWorkers", "медработников"],
-        ["8", "home.map.metrics.partnerPoints", "партнерских точек"],
-        ["4", "home.map.metrics.trainingVisitsFew", "обучающих выезда"],
+        ["home.map.values.mogilev.population", "home.map.metrics.population", "971,4 тыс.", "население"],
+        ["home.map.values.mogilev.doctorsPerCapita", "home.map.metrics.doctorsPerCapita", "35", "врачей на 10 000 человек"],
       ],
     },
     Minsk: {
@@ -628,10 +618,8 @@ if (belarusMapRoot) {
       text: "Центральный регион: связующее звено между столичным офисом и медицинскими учреждениями страны.",
       textKey: "home.map.regions.minskRegion.text",
       metrics: [
-        ["42", "home.map.metrics.clinics", "клиники"],
-        ["1 040+", "home.map.metrics.medicalWorkers", "медработников"],
-        ["14", "home.map.metrics.partnerPoints", "партнерских точек"],
-        ["8", "home.map.metrics.trainingVisits", "обучающих выездов"],
+        ["home.map.values.minskRegion.population", "home.map.metrics.population", "1,46 млн", "население"],
+        ["home.map.values.minskRegion.doctorsPerCapita", "home.map.metrics.doctorsPerCapita", "34", "врачей на 10 000 человек"],
       ],
     },
     "Minsk City": {
@@ -640,10 +628,8 @@ if (belarusMapRoot) {
       text: "Центральный офис OSSNOVA: координация поставок, партнерских проектов и поддержки специалистов.",
       textKey: "home.map.regions.minskCity.text",
       metrics: [
-        ["58", "home.map.metrics.clinicsMany", "клиник"],
-        ["1 480+", "home.map.metrics.medicalWorkers", "медработников"],
-        ["21", "home.map.metrics.partnerPoint", "партнерская точка"],
-        ["12", "home.map.metrics.trainingVisits", "обучающих выездов"],
+        ["home.map.values.minskCity.population", "home.map.metrics.population", "2,00 млн", "население"],
+        ["home.map.values.minskCity.doctorsPerCapita", "home.map.metrics.doctorsPerCapita", "58", "врачей на 10 000 человек"],
       ],
     },
   };
@@ -654,10 +640,8 @@ if (belarusMapRoot) {
     text: "Наведите на область на карте, чтобы увидеть информацию о региональном покрытии.",
     textKey: "home.map.panel.defaultText",
     metrics: [
-      ["259", "home.map.metrics.clinicsMany", "клиник"],
-      ["6 340+", "home.map.metrics.medicalWorkers", "медработников"],
-      ["85", "home.map.metrics.partnerPoints", "партнерских точек"],
-      ["47", "home.map.metrics.trainingVisits", "обучающих выездов"],
+      ["home.map.values.belarus.population", "home.map.metrics.population", "9,1 млн", "население"],
+      ["home.map.values.belarus.doctorsPerCapita", "home.map.metrics.doctorsPerCapita", "58", "врачей на 10 000 человек"],
     ],
   };
   let activeRegionDetails = defaultRegion;
@@ -665,8 +649,8 @@ if (belarusMapRoot) {
   const translateMapDetails = (details) => ({
     title: getI18nText(details.titleKey, details.title || "Беларусь"),
     text: getI18nText(details.textKey, details.text || ""),
-    metrics: (details.metrics || defaultRegion.metrics).map(([value, labelKey, labelFallback]) => [
-      value,
+    metrics: (details.metrics || defaultRegion.metrics).map(([valueKey, labelKey, valueFallback, labelFallback]) => [
+      getI18nText(valueKey, valueFallback || valueKey),
       getI18nText(labelKey, labelFallback || labelKey),
     ]),
   });
