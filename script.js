@@ -1,5 +1,5 @@
 const i18nStorageKey = "ossnova-language";
-const i18nDictionaryVersion = "formspree-2";
+const i18nDictionaryVersion = "brand-logo-1";
 const i18nDictionaryCachePrefix = "ossnova-i18n";
 const i18nPendingClass = "is-i18n-pending";
 const i18nSupportedLanguages = ["ru", "en"];
